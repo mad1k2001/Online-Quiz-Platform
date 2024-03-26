@@ -64,7 +64,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: score
-                  type: decimal
+                  type: real
               - column:
                   name: quiz_id
                   type: long
