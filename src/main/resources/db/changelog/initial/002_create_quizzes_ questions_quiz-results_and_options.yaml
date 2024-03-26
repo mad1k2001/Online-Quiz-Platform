@@ -1,0 +1,109 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create quizzes, questions, quiz_results and options tables
+      author: Evgeniia Dashko
+      changes:
+        - createTable:
+            tableName: quizzes
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(70)
+              - column:
+                  name: description
+                  type: varchar(100)
+              - column:
+                  name: creator_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_creator_id
+                    references: users(id)
+                    nullable: false
+                    deleteCascade: true
+
+
+        - createTable:
+            tableName: questions
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: question_text
+                  type: varchar(5000)
+              - column:
+                  name: quiz_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_quiz_id
+                    references: quizzes(id)
+                    nullable: false
+                    deleteCascade: true
+
+
+        - createTable:
+            tableName: quiz_results
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: score
+                  type: decimal
+              - column:
+                  name: quiz_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_quiz_id_
+                    references: quizzes(id)
+                    nullable: false
+                    deleteCascade: true
+              - column:
+                  name: user_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_user_id
+                    references: users(id)
+                    nullable: false
+                    deleteCascade: true
+
+
+        - createTable:
+            tableName: options
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: option_text
+                  type: varchar(1000)
+              - column:
+                  name: is_correct
+                  type: boolean
+              - column:
+                  name: question_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_question_id
+                    references: questions(id)
+                    nullable: false
+                    deleteCascade: true

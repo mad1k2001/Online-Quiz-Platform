@@ -1,2 +1,28 @@
 server:
-  port: 8080
+  port: 8089
+
+spring:
+  datasource:
+    url: jdbc:h2:./db/Online_Quiz_platform;AUTO_SERVER=TRUE
+    username: root
+    password: 1q2w3e
+    driver-class-name: org.h2.Driver
+
+  liquibase:
+    change-log: classpath:/db/changelog/master.yaml
+
+  h2:
+    console:
+      enabled: false
+
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    root: info
+
+
+  file:
+    name: logs/spring.log
