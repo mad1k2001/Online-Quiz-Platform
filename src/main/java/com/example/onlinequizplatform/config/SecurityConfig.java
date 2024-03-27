@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,7 +25,7 @@ public class SecurityConfig {
 
 
 //    TODO: выборку сделать после заполнения БД
-    private static final String USER_QUERY = "";
+    private static final String USER_QUERY = "select email, password, enabled from users where email = ?;";
     private static final String AUTHORITIES_QUERY = """
             
             """;
@@ -53,8 +54,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(HttpMethod.POST, "/vacancies").hasAuthority("Employer")  TODO: будут прописаны роли после заполнения БД
-//                        .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("Applicant") TODO: будут прописаны роли после заполнения БД
+                        .requestMatchers(HttpMethod.POST, "/api").hasAuthority("ADMIN")
                         .anyRequest().permitAll()
                 );
         return http.build();

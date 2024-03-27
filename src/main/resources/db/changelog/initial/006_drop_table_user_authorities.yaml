@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create table user_authorities
+      author: Evgeniia Dashko
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            catalogName: online_quiz_platform
+            schemaName: public
+            tableName: user_authorities

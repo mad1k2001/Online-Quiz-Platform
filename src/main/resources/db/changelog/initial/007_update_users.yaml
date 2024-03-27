@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: update table users
+      author: Evgeniia Dashko
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_role_id
+                    references: authorities(id)
+                    nullable: true
+                    deleteCascade: true
+
