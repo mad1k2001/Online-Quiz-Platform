@@ -36,6 +36,7 @@ public class QuizServiceImpl implements QuizService {
         return quizDao.createQuiz(quiz);
     }
 
+
     private Quiz makeQuiz(CreateQuizDto quizDto){
         return Quiz.builder()
                 .title(quizDto.getTitle())
@@ -53,23 +54,23 @@ public class QuizServiceImpl implements QuizService {
                 .build();
     }
 
-    private List<QuizDto> getQuizDto(List<Quiz> foundResumes) {
-        List<QuizDto> dto = new ArrayList<>();
-        for (Quiz quiz : foundResumes) {
-            QuizDto quizDto = QuizDto.builder()
-                    .id(quiz.getId())
-                    .title(quiz.getTitle())
-                    .description(quiz.getDescription())
-                    .creatorId(quiz.getCreatorId())
-                    .build();
-
+//    private List<QuizDto> getQuizDto(List<Quiz> foundResumes) {
+//        List<QuizDto> dto = new ArrayList<>();
+//        for (Quiz quiz : foundResumes) {
+//            QuizDto quizDto = QuizDto.builder()
+//                    .id(quiz.getId())
+//                    .title(quiz.getTitle())
+//                    .description(quiz.getDescription())
+//                    .creatorId(quiz.getCreatorId())
+//                    .build();
+//
 //            List<QuestionDto> questionDtoList = questionDao.getContactInfoByResumeId(quiz.getId()).stream()
 //                    .map(this::mapToContactInfoDto)
 //                    .collect(Collectors.toList());
 //
 //            resumeDto.setContactInfo(contactInfoList);
-            dto.add(quizDto);
-        }
-        return dto;
-    }
+//            dto.add(quizDto);
+//        }
+//        return dto;
+//    }
 }
