@@ -1,18 +1,14 @@
 package com.example.onlinequizplatform.dao;
 
 import com.example.onlinequizplatform.models.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
-@Repository
+@Component
+@RequiredArgsConstructor
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
-
-    public UserDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
 
     public void save(User user) {
