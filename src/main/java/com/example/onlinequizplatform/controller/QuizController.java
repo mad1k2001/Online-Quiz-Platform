@@ -29,9 +29,9 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-//    @PutMapping("/edit/{email}/quizzes/{quizzesId}")
-//    public HttpStatus updateQuiz(@PathVariable String email, @PathVariable Long quizzesId, @RequestBody QuizDto quizDto){
-//        quizService.updateQuiz(quizDto,email,quizzesId);
-//        return HttpStatus.OK;
-//    }
+    @PutMapping("/edit/{email}/quizzes/{quizzesId}")
+    public HttpStatus updateQuiz(@PathVariable String email, @PathVariable Long quizzesId, @RequestBody CreateQuizDto quizDto){
+        quizService.updateQuiz(quizDto,email,quizzesId);
+        return HttpStatus.OK;
+    }
 }

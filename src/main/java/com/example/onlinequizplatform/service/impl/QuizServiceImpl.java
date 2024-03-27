@@ -36,6 +36,11 @@ public class QuizServiceImpl implements QuizService {
         return quizDao.createQuiz(quiz);
     }
 
+    @Override
+    public void updateQuiz(CreateQuizDto quizDto, String email, Long quizzesId){
+        Quiz quiz = makeQuiz(quizDto);
+        quizDao.updateQuiz(quiz);
+    }
 
     private Quiz makeQuiz(CreateQuizDto quizDto){
         return Quiz.builder()
