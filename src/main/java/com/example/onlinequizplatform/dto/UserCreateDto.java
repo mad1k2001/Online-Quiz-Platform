@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCreateDto {
     private String name;
+    private String email;
+    private String password;
 
 //    TODO: для регистрации пользователя
-
-
 }
