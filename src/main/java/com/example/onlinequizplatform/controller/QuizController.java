@@ -1,7 +1,5 @@
 package com.example.onlinequizplatform.controller;
 
-import com.example.onlinequizplatform.dto.CreateQuizDto;
-import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.dto.QuizDto;
 import com.example.onlinequizplatform.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +22,13 @@ public class QuizController {
 
 
     @PostMapping("add/{email}")
-    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody CreateQuizDto createQuizDto) {
-        quizService.createQuiz(createQuizDto, email);
+    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody QuizDto quizDto) {
+        quizService.createQuiz(quizDto, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @PutMapping("/edit/{email}/quizzes/{quizzesId}")
-    public HttpStatus updateQuiz(@PathVariable String email, @PathVariable Long quizzesId, @RequestBody CreateQuizDto quizDto){
+    public HttpStatus updateQuiz(@PathVariable String email, @PathVariable Long quizzesId, @RequestBody QuizDto quizDto){
         quizService.updateQuiz(quizDto,email,quizzesId);
         return HttpStatus.OK;
     }

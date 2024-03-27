@@ -3,7 +3,6 @@ package com.example.onlinequizplatform.service.impl;
 import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
 import com.example.onlinequizplatform.dao.UserDao;
-import com.example.onlinequizplatform.dto.CreateQuizDto;
 import com.example.onlinequizplatform.dto.QuizDto;
 import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.service.QuizService;
@@ -31,18 +30,18 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Long createQuiz(CreateQuizDto quizDto, String email) {
+    public Long createQuiz(QuizDto quizDto, String email) {
         Quiz quiz = makeQuiz(quizDto);
         return quizDao.createQuiz(quiz);
     }
 
     @Override
-    public void updateQuiz(CreateQuizDto quizDto, String email, Long quizzesId){
+    public void updateQuiz(QuizDto quizDto, String email, Long quizzesId){
         Quiz quiz = makeQuiz(quizDto);
         quizDao.updateQuiz(quiz);
     }
 
-    private Quiz makeQuiz(CreateQuizDto quizDto){
+    private Quiz makeQuiz(QuizDto quizDto){
         return Quiz.builder()
                 .title(quizDto.getTitle())
                 .description(quizDto.getDescription())
