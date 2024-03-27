@@ -22,6 +22,9 @@ spring:
 logging:
   level:
     root: info
+    org:
+      springframework:
+        security: debug
 
 
   file:

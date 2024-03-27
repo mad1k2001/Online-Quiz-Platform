@@ -27,7 +27,9 @@ public class SecurityConfig {
 //    TODO: выборку сделать после заполнения БД
     private static final String USER_QUERY = "select email, password, enabled from users where email = ?;";
     private static final String AUTHORITIES_QUERY = """
-            
+            select u.email, a.role from users u, authorities a
+            where u.role_id = a.id
+            and email = ?;
             """;
 
     @Bean
@@ -54,8 +56,8 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api").hasAuthority("ADMIN")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/quizzes/**").hasAuthority("ADMIN")
+                        .anyRequest().anonymous()
                 );
         return http.build();
     }
