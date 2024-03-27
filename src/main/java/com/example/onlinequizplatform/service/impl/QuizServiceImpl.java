@@ -20,17 +20,24 @@ import java.util.Optional;
 public class QuizServiceImpl implements QuizService {
     private final UserDao userDao;
     private final QuizDao quizDao;
-    private final QuestionDao questionDao;
+//    private final QuestionDao questionDao;
 
     @Override
-    public void createQuiz(CreateQuizDto quizDto, Long applicantId) {
-        Optional<User> userOptional = userDao.getUserById(applicantId);
-        if (userOptional.isEmpty()) {
-            log.error("Can't find user with id: " + applicantId);
-        }
+    public Long createQuiz(CreateQuizDto quizDto, Long creatorId) {
+//        Optional<User> userOptional = userDao.getUserById(creatorId);
+//        if (userOptional.isEmpty()) {
+//            log.error("Can't find user with id: " + creatorId);
+//        }
         Quiz quiz = makeQuiz(quizDto);
         return quizDao.createQuiz(quiz);
     }
 
+    private Quiz makeQuiz(CreateQuizDto quizDto){
+        return Quiz.builder()
+                .title(quizDto.getTitle())
+                .description(quizDto.getDescription())
+                .creatorId(quizDto.getCreatorId())
+                .build();
+    }
 
 }

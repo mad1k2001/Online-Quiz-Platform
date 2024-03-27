@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,4 +15,5 @@ public class QuestionDto {
     private Long id;
     private String questionText;
     private Long quizId;
+    private List<OptionDto> option;
 }

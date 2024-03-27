@@ -17,11 +17,13 @@ import java.util.List;
 public class QuizController {
     private final QuizService quizService;
 
-    @PostMapping
-    public ResponseEntity<QuizDto> createQuiz(@RequestBody CreateQuizDto createQuizDto) {
-        QuizDto createdQuiz = quizService.createQuiz(createQuizDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdQuiz);
+    @PostMapping("add/{creatorId}")
+    public ResponseEntity<QuizDto> createQuiz(@PathVariable Long creatorId, @RequestBody CreateQuizDto createQuizDto) {
+        quizService.createQuiz(createQuizDto, creatorId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
+
+
 
 //    @GetMapping
 //    public ResponseEntity<List<QuizDto>> getAllQuizzes() {

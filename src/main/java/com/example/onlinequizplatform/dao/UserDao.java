@@ -4,6 +4,8 @@ import com.example.onlinequizplatform.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;

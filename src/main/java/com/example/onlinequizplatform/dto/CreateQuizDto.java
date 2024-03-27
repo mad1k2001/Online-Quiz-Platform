@@ -16,5 +16,4 @@ public class CreateQuizDto {
     private String description;
     private Long creatorId;
     private List<QuestionDto> question;
-    private List<OptionDto> option;
 }
