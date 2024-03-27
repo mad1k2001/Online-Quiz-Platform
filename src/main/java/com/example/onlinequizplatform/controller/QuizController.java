@@ -13,15 +13,22 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/quizzes")
+@RequestMapping("api/quizzes")
 public class QuizController {
     private final QuizService quizService;
 
-    @PostMapping("add/{creatorId}")
-    public ResponseEntity<QuizDto> createQuiz(@PathVariable Long creatorId, @RequestBody CreateQuizDto createQuizDto) {
-        quizService.createQuiz(createQuizDto, creatorId);
+    @GetMapping("")
+    public ResponseEntity<List<QuizDto>> getQuizzes() {
+        return ResponseEntity.ok(quizService.getQuizzes());
+    }
+
+
+    @PostMapping("add/{email}")
+    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody CreateQuizDto createQuizDto) {
+        quizService.createQuiz(createQuizDto, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.onlinequizplatform.dao;
 
 import com.example.onlinequizplatform.models.Quiz;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -9,16 +10,23 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 public class QuizDao {
     private final JdbcTemplate jdbcTemplate;
+    public List<Quiz> getQuizzes(){
+        String sql = """
+                select * from quizzes
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Quiz.class));
+    }
+
     public Long createQuiz(Quiz quiz) {
         String sql = """
-                INSERT INTO quizzes(title, desсription, creator_id)
+                INSERT INTO quizzes(title, desсription, creatorId)
                 values (?,?,?)
                 """;
 
