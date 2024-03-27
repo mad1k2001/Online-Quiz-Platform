@@ -5,19 +5,19 @@ import com.example.onlinequizplatform.dto.UserCreateDto;
 import com.example.onlinequizplatform.models.User;
 import com.example.onlinequizplatform.service.AuthorityService;
 import com.example.onlinequizplatform.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityService authorityService;
 
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public void registerUser(UserCreateDto userCreateDto) {
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
                 .name(userCreateDto.getName())
                 .email(userCreateDto.getEmail())
                 .password(passwordEncoder.encode(userCreateDto.getPassword()))
-                .roleId(authorityService.getRoles("ADMIN").getId())
+                .roleId(authorityService.getRoles("ADMIN").getRole())
                 .build();
 
         userDao.save(user);
