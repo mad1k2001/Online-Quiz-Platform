@@ -135,8 +135,14 @@ public class QuizServiceImpl implements QuizService {
     public void solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
         User user = (User) auth.getPrincipal();
         String authorEmail=user.getUsername();
-        QuizDto quizDto = getQuizById(quizId);
-        UserDto userDto = userService.getUserByEmail(authorEmail);
+
+        List<Question> questions = questionDao.getQuestionsByQuizId(quizId);
+        if(questions.stream().count()!=questionSolveDtos.stream().count()){
+            String message="You haven't answered all the questions";
+            log.error(message);
+            throw new CustomException(message);
+        }
+
         quizResultService.getResultsByUserEmail(authorEmail);
         if(quizResultService.isAnsweredQuiz(authorEmail,quizId)){
             String message="User cannot pass quiz because he has already passed it";

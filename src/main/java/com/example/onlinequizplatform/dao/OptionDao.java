@@ -45,7 +45,7 @@ public class OptionDao {
     }
 
     public Optional<Option> getOptionsByQuestionText(Long questionId, String ansver) {
-        String sql = "SELECT * FROM options WHERE  questionId = ? and option_text = ?";
+        String sql = "SELECT * FROM options WHERE  question_Id = ? and option_text = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class),
                         questionId,  ansver)));

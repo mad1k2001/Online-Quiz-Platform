@@ -17,7 +17,7 @@ public class QuizResultDao {
     public List<QuizResult> getResultsByUserEmail(String email){
         String sql = """
                 SELECT * FROM quiz_results q
-                left join user u on u.id = q.user_id 
+                left join users u on u.id = q.user_id 
                 WHERE u.email = ? ;
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), email);
@@ -26,9 +26,9 @@ public class QuizResultDao {
     public boolean isAnswered(String email, Long quizId){
         String sql = """
                 SELECT
-                     CASE WHEN (count(*) >0) THEN false ELSE true END as result
+                     CASE WHEN (count(*) >0) THEN true ELSE false END as result
                  FROM quiz_results q
-                left join user u on u.id = q.user_id 
+                left join users u on u.id = q.user_id 
                 WHERE u.email = ? 
                 and q.quiz_id = ?;
                 """;

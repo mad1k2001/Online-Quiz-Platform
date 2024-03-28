@@ -55,7 +55,7 @@ public class QuestionDao {
     }
 
     public Optional<Question> getQuestionsByQuizIdAndQuestion(Long quizId, String  question) {
-        String sql = "SELECT * FROM questions WHERE quizId = ? and QUESTION_TEXT = ?";
+        String sql = "SELECT * FROM questions WHERE quiz_Id = ? and QUESTION_TEXT = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class),
                         quizId, question)));
