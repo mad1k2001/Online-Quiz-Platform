@@ -74,6 +74,13 @@ public class QuizServiceImpl implements QuizService {
         }
     }
 
+    @Override
+    public Long createQuestionForQuiz(Long quizId, QuestionDto questionDto) {
+
+        Question question = makeQuestion(questionDto, quizId);
+        return questionDao.createQuestion(question);
+    }
+
     private Quiz makeQuiz(QuizDto quizDto){
         return Quiz.builder()
                 .title(quizDto.getTitle())
@@ -90,6 +97,15 @@ public class QuizServiceImpl implements QuizService {
                 .creatorId(quiz.getCreatorId())
                 .build();
     }
+
+
+    private Question makeQuestion(QuestionDto questionDto, Long quizId) {
+        return Question.builder()
+                .questionText(questionDto.getQuestionText())
+                .quizId(quizId)
+                .build();
+    }
+}
 
     private Question makeQuestion(QuestionDto questionDto) {
         return Question.builder()
