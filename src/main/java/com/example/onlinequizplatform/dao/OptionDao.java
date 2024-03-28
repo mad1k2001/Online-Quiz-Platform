@@ -2,12 +2,15 @@ package com.example.onlinequizplatform.dao;
 
 import com.example.onlinequizplatform.models.Option;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -31,5 +34,10 @@ public class OptionDao {
     public void updateOption(Option option) {
         String sql = "UPDATE options SET optionText = ?, isCorrect = ? WHERE id = ?";
         jdbcTemplate.update(sql, option.getOptionText(), option.getIsCorrect(), option.getId());
+    }
+
+    public List<Option> getOptionsByQuestionId(Long questionId) {
+        String sql = "SELECT * FROM options WHERE questionId = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class), questionId);
     }
 }
