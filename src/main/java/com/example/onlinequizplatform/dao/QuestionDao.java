@@ -60,6 +60,4 @@ public class QuestionDao {
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class),
                         quizId, question)));
     }
-
-
 }
