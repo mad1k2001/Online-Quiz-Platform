@@ -42,4 +42,16 @@ public class QuizController {
         quizService.solve(quizId, questionSolveDtos, auth);
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/{quizId}")
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
+        QuizDto quizDto = quizService.getQuizById(quizId);
+        if (quizDto != null) {
+            return ResponseEntity.ok(quizDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
+
+

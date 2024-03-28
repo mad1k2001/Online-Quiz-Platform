@@ -1,8 +1,10 @@
 package com.example.onlinequizplatform.service.impl;
 
+import com.example.onlinequizplatform.dao.OptionDao;
 import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
 import com.example.onlinequizplatform.dao.UserDao;
+import com.example.onlinequizplatform.dto.OptionDto;
 import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
@@ -10,7 +12,9 @@ import com.example.onlinequizplatform.dto.UserDto;
 import com.example.onlinequizplatform.exeptions.CustomException;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
+import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.service.QuizResultService;
+
 import com.example.onlinequizplatform.service.QuizService;
 import com.example.onlinequizplatform.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ public class QuizServiceImpl implements QuizService {
     private final UserService userService;
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
+    private final OptionDao optionDao;
     private final QuizResultService quizResultService;
 
     @Override
@@ -82,14 +87,38 @@ public class QuizServiceImpl implements QuizService {
                 .build();
     }
 
+    private OptionDto makeOptionDto(Option option) {
+        return OptionDto.builder()
+                .id(option.getId())
+                .optionText(option.getOptionText())
+                .isCorrect(option.getIsCorrect())
+                .questionId(option.getQuestionId())
+                .build();
+    }
+
+    private QuestionDto makeQuestionDto(Question question, List<OptionDto> options) {
+        return QuestionDto.builder()
+                .id(question.getId())
+                .questionText(question.getQuestionText())
+                .quizId(question.getQuizId())
+                .option(options)
+                .build();
+    }
+
     @Override
     public QuizDto getQuizById(Long quizId) {
         Quiz quiz = quizDao.getQuizById(quizId);
         if (quiz != null) {
-            return convertToDto(quiz);
-        } else {
-            return null;
-        }
+            QuizDto quizDto = makeQuizDto(quiz);
+            List<Question> questions = questionDao.getQuestionsByQuizId(quizId);
+            List<QuestionDto> questionDtos = new ArrayList<>();
+            for (Question question : questions) {
+                List<Option> options = optionDao.getOptionsByQuestionId(question.getId());
+                List<OptionDto> optionDtos = new ArrayList<>();
+                for (Option option : options) {
+                    if (!option.getIsCorrect()) {
+                        optionDtos.add(makeOptionDto(option));
+                    }
     }
 
     @Override
@@ -103,14 +132,13 @@ public class QuizServiceImpl implements QuizService {
                 throw new CustomException ("User cannot pass quiz because he has already passed it");
             }
 
-    }
-
-    private QuizDto convertToDto(Quiz quiz) {
-        return QuizDto.builder()
-                .id(quiz.getId())
-                .title(quiz.getTitle())
-                .description(quiz.getDescription())
-                .creatorId(quiz.getCreatorId())
-                .build();
+                }
+                QuestionDto questionDto = makeQuestionDto(question, optionDtos);
+                questionDtos.add(questionDto);
+            }
+            quizDto.setQuestions(questionDtos);
+            return quizDto;
+        }
+        return null;
     }
 }
