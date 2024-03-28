@@ -50,7 +50,7 @@ public class QuestionDao {
         jdbcTemplate.update(sql, question.getQuestionText(), question.getId());
     }
     public List<Question> getQuestionsByQuizId(Long quizId) {
-        String sql = "SELECT * FROM questions WHERE quizId = ?";
+        String sql = "SELECT * FROM questions WHERE quiz_Id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), quizId);
     }
 
