@@ -1,4 +1,6 @@
 package com.example.onlinequizplatform.dao;
+import com.example.onlinequizplatform.models.Option;
+import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -43,6 +45,11 @@ public class QuizDao {
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
+    public Quiz getQuizById(Long quizId) {
+        String sql = "SELECT * FROM quizzes WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Quiz.class), quizId);
+    }
+
     public void updateQuiz(Quiz quiz) {
         String sql = """
                 UPDATE quizzes
@@ -56,31 +63,5 @@ public class QuizDao {
                 .addValue("description", quiz.getDescription())
                 .addValue("creatorId", quiz.getDescription()));
     }
-    public Quiz getQuizById(Long quizId) {
-        String sql = "SELECT * FROM quizzes WHERE id = ?";
-        try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{quizId}, new BeanPropertyRowMapper<>(Quiz.class));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-//    private List<Question> getQuestionsByQuizId(Long quizId) {
-//        String sql = "SELECT * FROM questions WHERE quizId = ?";
-//        try {
-//            return jdbcTemplate.query(sql, new Object[]{quizId}, new BeanPropertyRowMapper<>(Question.class));
-//        } catch (Exception e) {
-//            return Collections.emptyList();
-//        }
-//    }
-
-//    private List<Option> getOptionsByQuestionId(Long questionId) {
-//        String sql = "SELECT * FROM options WHERE questionId = ?";
-//        try {
-//            return jdbcTemplate.query(sql, new Object[]{questionId}, new BeanPropertyRowMapper<>(Option.class));
-//        } catch (Exception e) {
-//            return Collections.emptyList();
-//        }
-//    }
 
 }

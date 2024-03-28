@@ -32,4 +32,16 @@ public class QuizController {
         quizService.updateQuiz(quizDto,email,quizzesId);
         return HttpStatus.OK;
     }
+
+    @GetMapping("/{quizId}")
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
+        QuizDto quizDto = quizService.getQuizById(quizId);
+        if (quizDto != null) {
+            return ResponseEntity.ok(quizDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
+
+
