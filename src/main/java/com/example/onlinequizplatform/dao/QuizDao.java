@@ -1,5 +1,3 @@
-package com.example.onlinequizplatform.dao;
-
 import com.example.onlinequizplatform.models.Quiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
