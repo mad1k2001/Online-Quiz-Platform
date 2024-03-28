@@ -2,6 +2,8 @@ package com.example.onlinequizplatform.service.impl;
 
 import com.example.onlinequizplatform.dao.UserDao;
 import com.example.onlinequizplatform.dto.UserCreateDto;
+import com.example.onlinequizplatform.dto.UserDto;
+import com.example.onlinequizplatform.exeptions.CustomException;
 import com.example.onlinequizplatform.models.User;
 import com.example.onlinequizplatform.service.AuthorityService;
 import com.example.onlinequizplatform.service.UserService;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,4 +34,18 @@ public class UserServiceImpl implements UserService {
 
         userDao.save(user);
     }
+
+    @Override
+    public UserDto getUserByEmail(String email){
+        Optional<User> user = userDao.getUsersByEmail(email);
+        if(user.isEmpty()){
+            throw new CustomException("User is not found");
+        }
+        return UserDto.builder()
+                .id(user.get().getId())
+                .name(user.get().getName())
+                .email(user.get().getEmail())
+                .build();
+    }
+
 }

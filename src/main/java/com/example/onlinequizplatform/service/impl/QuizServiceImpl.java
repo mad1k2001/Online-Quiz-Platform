@@ -7,9 +7,12 @@ import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
 import com.example.onlinequizplatform.dto.UserDto;
+import com.example.onlinequizplatform.exeptions.CustomException;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
+import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
+import com.example.onlinequizplatform.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -23,9 +26,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
-    private final UserDao userDao;
+    private final UserService userService;
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
+    private final QuizResultService quizResultService;
 
     @Override
     public List<QuizDto> getQuizzes() {
@@ -93,6 +97,11 @@ public class QuizServiceImpl implements QuizService {
         User user = (User) auth.getPrincipal();
         String authorEmail=user.getUsername();
         QuizDto quizDto = getQuizById(quizId);
+        UserDto userDto = userService.getUserByEmail(authorEmail);
+        quizResultService.getResultsByUserEmail(authorEmail);
+            if(quizResultService.isAnsweredQuiz(authorEmail,quizId)){
+                throw new CustomException ("User cannot pass quiz because he has already passed it");
+            }
 
     }
 
