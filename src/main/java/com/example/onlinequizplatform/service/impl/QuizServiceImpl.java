@@ -4,12 +4,16 @@ import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
 import com.example.onlinequizplatform.dao.UserDao;
 import com.example.onlinequizplatform.dto.QuestionDto;
+import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
+import com.example.onlinequizplatform.dto.UserDto;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -82,6 +86,14 @@ public class QuizServiceImpl implements QuizService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        String authorEmail=user.getUsername();
+        QuizDto quizDto = getQuizById(quizId);
+
     }
 
     private QuizDto convertToDto(Quiz quiz) {
