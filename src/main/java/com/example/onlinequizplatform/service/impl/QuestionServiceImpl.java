@@ -5,12 +5,8 @@ import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.service.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
