@@ -27,4 +27,9 @@ public class OptionDao {
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
+
+    public void updateOption(Option option) {
+        String sql = "UPDATE options SET optionText = ?, isCorrect = ? WHERE id = ?";
+        jdbcTemplate.update(sql, option.getOptionText(), option.getIsCorrect(), option.getId());
+    }
 }
