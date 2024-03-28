@@ -1,3 +1,5 @@
+package com.example.onlinequizplatform.dao;
+
 import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.models.Question;
 import lombok.RequiredArgsConstructor;

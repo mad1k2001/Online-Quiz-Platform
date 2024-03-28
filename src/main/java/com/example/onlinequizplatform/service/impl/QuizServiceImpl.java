@@ -3,7 +3,9 @@ package com.example.onlinequizplatform.service.impl;
 import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
 import com.example.onlinequizplatform.dao.UserDao;
+import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.dto.QuizDto;
+import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,13 @@ public class QuizServiceImpl implements QuizService {
         quizDao.updateQuiz(quiz);
     }
 
+    @Override
+    public Long createQuestionForQuiz(Long quizId, QuestionDto questionDto) {
+
+        Question question = makeQuestion(questionDto, quizId);
+        return questionDao.createQuestion(question);
+    }
+
     private Quiz makeQuiz(QuizDto quizDto){
         return Quiz.builder()
                 .title(quizDto.getTitle())
@@ -58,23 +67,10 @@ public class QuizServiceImpl implements QuizService {
                 .build();
     }
 
-//    private List<QuizDto> getQuizDto(List<Quiz> foundResumes) {
-//        List<QuizDto> dto = new ArrayList<>();
-//        for (Quiz quiz : foundResumes) {
-//            QuizDto quizDto = QuizDto.builder()
-//                    .id(quiz.getId())
-//                    .title(quiz.getTitle())
-//                    .description(quiz.getDescription())
-//                    .creatorId(quiz.getCreatorId())
-//                    .build();
-//
-//            List<QuestionDto> questionDtoList = questionDao.getContactInfoByResumeId(quiz.getId()).stream()
-//                    .map(this::mapToContactInfoDto)
-//                    .collect(Collectors.toList());
-//
-//            resumeDto.setContactInfo(contactInfoList);
-//            dto.add(quizDto);
-//        }
-//        return dto;
-//    }
+    private Question makeQuestion(QuestionDto questionDto, Long quizId) {
+        return Question.builder()
+                .questionText(questionDto.getQuestionText())
+                .quizId(quizId)
+                .build();
+    }
 }
