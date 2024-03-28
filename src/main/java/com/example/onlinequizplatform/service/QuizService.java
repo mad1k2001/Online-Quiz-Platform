@@ -10,4 +10,5 @@ public interface QuizService {
     Long createQuiz(QuizDto quizDto, String email);
     void updateQuiz(QuizDto quizDto, String email, Long quizzesId);
     Long createQuestionForQuiz(Long quizId, QuestionDto questionDto);
+    QuizDto getQuizById(Long quizId);
 }
