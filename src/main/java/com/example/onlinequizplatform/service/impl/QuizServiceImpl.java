@@ -3,18 +3,17 @@ package com.example.onlinequizplatform.service.impl;
 import com.example.onlinequizplatform.dao.OptionDao;
 import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
-import com.example.onlinequizplatform.dao.UserDao;
 import com.example.onlinequizplatform.dto.OptionDto;
 import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
 import com.example.onlinequizplatform.dto.UserDto;
 import com.example.onlinequizplatform.exeptions.CustomException;
+import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
-import com.example.onlinequizplatform.models.Option;
-import com.example.onlinequizplatform.service.QuizResultService;
 
+import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import com.example.onlinequizplatform.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +24,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
+    private final OptionDao optionDao;
+
     private final UserService userService;
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
-    private final OptionDao optionDao;
     private final QuizResultService quizResultService;
 
     @Override
@@ -119,6 +121,14 @@ public class QuizServiceImpl implements QuizService {
                     if (!option.getIsCorrect()) {
                         optionDtos.add(makeOptionDto(option));
                     }
+                }
+                QuestionDto questionDto = makeQuestionDto(question, optionDtos);
+                questionDtos.add(questionDto);
+            }
+            quizDto.setQuestions(questionDtos);
+            return quizDto;
+        }
+        return null;
     }
 
     @Override
@@ -128,17 +138,42 @@ public class QuizServiceImpl implements QuizService {
         QuizDto quizDto = getQuizById(quizId);
         UserDto userDto = userService.getUserByEmail(authorEmail);
         quizResultService.getResultsByUserEmail(authorEmail);
-            if(quizResultService.isAnsweredQuiz(authorEmail,quizId)){
-                throw new CustomException ("User cannot pass quiz because he has already passed it");
+        if(quizResultService.isAnsweredQuiz(authorEmail,quizId)){
+            String message="User cannot pass quiz because he has already passed it";
+            log.error(message);
+            throw new CustomException(message);
+        }
+        AtomicInteger countQuestion= new AtomicInteger();
+       AtomicInteger isCorrectAnsver= new AtomicInteger();
+
+        questionSolveDtos.forEach(f->{
+            countQuestion.getAndIncrement();
+            String question=f.getQuestionText();
+            Optional<Question> questionRes=questionDao.getQuestionsByQuizIdAndQuestion(quizId, f.getQuestionText());
+            if(questionRes.isEmpty()){
+                String message="This error question: "+f.getQuestionText();
+                log.error(message);
+                throw new CustomException(message);
             }
 
+            f.getAnswers().forEach(an->{
+                Optional<Option> resOp= optionDao.getOptionsByQuestionText(questionRes.get().getId(),an.getOptionText());
+                if(resOp.isEmpty()){
+                    String message="This error answer: "+an.getOptionText();
+                    log.error(message);
+                    throw new CustomException(message);
                 }
-                QuestionDto questionDto = makeQuestionDto(question, optionDtos);
-                questionDtos.add(questionDto);
-            }
-            quizDto.setQuestions(questionDtos);
-            return quizDto;
-        }
-        return null;
+                if(resOp.get().getIsCorrect()){
+                    isCorrectAnsver.getAndIncrement();
+                }
+
+
+            });
+
+
+        });
+
+        String test="";
+
     }
 }

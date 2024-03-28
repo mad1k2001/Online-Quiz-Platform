@@ -1,7 +1,9 @@
 package com.example.onlinequizplatform.dao;
 
 import com.example.onlinequizplatform.models.Option;
+import com.example.onlinequizplatform.models.Question;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -39,5 +42,12 @@ public class OptionDao {
     public List<Option> getOptionsByQuestionId(Long questionId) {
         String sql = "SELECT * FROM options WHERE questionId = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class), questionId);
+    }
+
+    public Optional<Option> getOptionsByQuestionText(Long questionId, String ansver) {
+        String sql = "SELECT * FROM options WHERE  questionId = ? and option_text = ?";
+        return Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class),
+                        questionId,  ansver)));
     }
 }
