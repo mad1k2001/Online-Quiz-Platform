@@ -182,4 +182,10 @@ public class QuizServiceImpl implements QuizService {
         String test="";
 
     }
+
+    @Override
+    public void rateQuiz(Long quizId, int correctAnswersCount, int totalQuestionsCount) {
+        Double rating = (double) correctAnswersCount / totalQuestionsCount * 5.0;
+        quizDao.updateQuizRating(quizId, rating);
+    }
 }

@@ -1,4 +1,5 @@
 package com.example.onlinequizplatform.dao;
+
 import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
@@ -64,4 +65,8 @@ public class QuizDao {
                 .addValue("creatorId", quiz.getDescription()));
     }
 
+    public void updateQuizRating(Long quizId, Double rating) {
+        String sql = "UPDATE quizzes SET rating = ? WHERE id = ?";
+        jdbcTemplate.update(sql, rating, quizId);
+    }
 }

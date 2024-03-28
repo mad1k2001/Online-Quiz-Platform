@@ -52,6 +52,12 @@ public class QuizController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/{quizId}/rate")
+    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, @RequestParam int correctAnswersCount, @RequestParam int totalQuestionsCount) {
+        quizService.rateQuiz(quizId, correctAnswersCount, totalQuestionsCount);
+        return ResponseEntity.ok().build();
+    }
 }
 
 
