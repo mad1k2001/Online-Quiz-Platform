@@ -21,4 +21,9 @@ public class QuestionServiceImpl implements QuestionService {
     public Long createOption(Option option) {
         return questionDao.createOption(option);
     }
+
+    @Override
+    public void updateQuestion(Question question) {
+        questionDao.updateQuestion(question);
+    }
 }

@@ -6,4 +6,5 @@ import com.example.onlinequizplatform.models.Option;
 public interface QuestionService {
     Long createQuestion(Question question);
     Long createOption(Option option);
+    void updateQuestion(Question question);
 }

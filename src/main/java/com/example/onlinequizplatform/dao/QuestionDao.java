@@ -40,4 +40,8 @@ public class QuestionDao {
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
+    public void updateQuestion(Question question) {
+        String sql = "UPDATE questions SET questionText = ? WHERE id = ?";
+        jdbcTemplate.update(sql, question.getQuestionText(), question.getId());
+    }
 }
