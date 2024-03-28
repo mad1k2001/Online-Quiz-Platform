@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
 
+
     public void save(User user) {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword());
+        String sql = "INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?,?)";
+        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getRoleId());
     }
 }
