@@ -1,9 +1,6 @@
 package com.example.onlinequizplatform.models;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -11,6 +8,8 @@ import java.math.BigDecimal;
 @Setter
 @Data
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuizResult {
     private Long id;
     private BigDecimal score;

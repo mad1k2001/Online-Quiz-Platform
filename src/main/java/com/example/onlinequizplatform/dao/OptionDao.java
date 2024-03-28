@@ -37,7 +37,7 @@ public class OptionDao {
     }
 
     public List<Option> getOptionsByQuestionId(Long questionId) {
-        String sql = "SELECT * FROM options WHERE questionId = ?";
+        String sql = "SELECT * FROM options WHERE question_Id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class), questionId);
     }
 }
