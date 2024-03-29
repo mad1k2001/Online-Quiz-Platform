@@ -31,46 +31,6 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     }
 
-    @Override
-    public QuizResultDto getQuizResults(Long quizId) {
-        List<QuestionDto> questions = quizResultDao.getQuestionsByQuizId(quizId);
-        List<OptionDto> userAnswers = quizResultDao.getUserAnswersForQuiz(quizId);
-
-        QuizResultDto quizResultDto = calculateQuizResult(quizId, questions, userAnswers);
-
-        return quizResultDto;
-    }
-
-    private QuizResultDto calculateQuizResult(Long quizId, List<QuestionDto> questions, List<OptionDto> userAnswers) {
-        int correctAnswersCount = 0;
-        int totalQuestionsCount = questions.size();
-
-        for (QuestionDto question : questions) {
-            Long questionId = question.getId();
-            OptionDto userAnswer = getUserAnswerByQuestionId(userAnswers, questionId);
-            if (userAnswer != null && userAnswer.getIsCorrect()) {
-                correctAnswersCount++;
-            }
-        }
-
-        double score = ((double) correctAnswersCount / totalQuestionsCount) * 100;
-
-        return QuizResultDto.builder()
-                .quizId(quizId)
-                .score(BigDecimal.valueOf(score))
-                .build();
-    }
-
-    private OptionDto getUserAnswerByQuestionId(List<OptionDto> userAnswers, Long questionId) {
-        for (OptionDto answer : userAnswers) {
-            if (answer.getQuestionId().equals(questionId)) {
-                return answer;
-            }
-        }
-        return null;
-    }
-
-
     private QuizResultDto mapToDto(QuizResult quizResult) {
         return QuizResultDto.builder()
                 .id(quizResult.getId())

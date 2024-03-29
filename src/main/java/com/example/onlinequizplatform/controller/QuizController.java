@@ -61,16 +61,6 @@ public class QuizController {
         quizService.rateQuiz(quizId, correctAnswersCount, totalQuestionsCount);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/{quizId}/results")
-    public ResponseEntity<QuizResultDto> resultQuiz(@PathVariable Long quizId) {
-        QuizResultDto quizResultDto = quizResultService.getQuizResults(quizId);
-        if (quizResultDto != null) {
-            return ResponseEntity.ok(quizResultDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
 
 
