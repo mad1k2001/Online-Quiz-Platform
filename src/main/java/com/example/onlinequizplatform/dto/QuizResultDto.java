@@ -16,4 +16,6 @@ public class QuizResultDto {
     private BigDecimal score;
     private Long quizId;
     private Long userId;
+    private int correctAnswers;
+    private int totalQuestions;
 }

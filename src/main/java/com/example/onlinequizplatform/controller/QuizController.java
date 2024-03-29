@@ -62,14 +62,21 @@ public class QuizController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{quizId}/results")
-    public ResponseEntity<QuizResultDto> resultQuiz(@PathVariable Long quizId) {
-        QuizResultDto quizResultDto = quizResultService.getQuizResults(quizId);
-        if (quizResultDto != null) {
-            return ResponseEntity.ok(quizResultDto);
-        } else {
+    @GetMapping("/api/quizzes/{quizId}/results")
+    public ResponseEntity<?> getQuizResults(@PathVariable Long quizId) {
+        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId);
+        if (quizResult == null) {
             return ResponseEntity.notFound().build();
         }
+
+        int totalQuestions = quizResult.getTotalQuestions();
+        int correctAnswers = quizResult.getCorrectAnswers();
+
+        QuizResultDto resultSummary = new QuizResultDto();
+        resultSummary.setTotalQuestions(totalQuestions);
+        resultSummary.setCorrectAnswers(correctAnswers);
+
+        return ResponseEntity.ok(resultSummary);
     }
 }
 

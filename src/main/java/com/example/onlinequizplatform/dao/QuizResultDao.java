@@ -38,13 +38,8 @@ public class QuizResultDao {
         return jdbcTemplate.queryForObject(sql, Boolean.class, email, quizId);
     }
 
-    public List<QuestionDto> getQuestionsByQuizId(Long quizId) {
-        String sql = "SELECT * FROM questions WHERE quiz_id = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuestionDto.class), quizId);
-    }
-
-    public List<OptionDto> getUserAnswersForQuiz(Long quizId) {
-        String sql = "SELECT * FROM options WHERE QUESTION_ID = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(OptionDto.class), quizId);
+    public QuizResult getQuizResultById(Long resultId) {
+        String sql = "SELECT * FROM quiz_results WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(QuizResult.class), resultId);
     }
 }
