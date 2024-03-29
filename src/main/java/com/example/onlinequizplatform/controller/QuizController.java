@@ -61,6 +61,23 @@ public class QuizController {
         quizService.rateQuiz(quizId, correctAnswersCount, totalQuestionsCount);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/api/quizzes/{quizId}/results")
+    public ResponseEntity<?> getQuizResults(@PathVariable Long quizId) {
+        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId);
+        if (quizResult == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int totalQuestions = quizResult.getTotalQuestions();
+        int correctAnswers = quizResult.getCorrectAnswers();
+
+        QuizResultDto resultSummary = new QuizResultDto();
+        resultSummary.setTotalQuestions(totalQuestions);
+        resultSummary.setCorrectAnswers(correctAnswers);
+
+        return ResponseEntity.ok(resultSummary);
+    }
 }
 
 

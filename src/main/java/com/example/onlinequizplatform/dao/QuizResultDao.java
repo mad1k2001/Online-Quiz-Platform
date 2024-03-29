@@ -37,4 +37,9 @@ public class QuizResultDao {
 
         return jdbcTemplate.queryForObject(sql, Boolean.class, email, quizId);
     }
+
+    public QuizResult getQuizResultById(Long resultId) {
+        String sql = "SELECT * FROM quiz_results WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(QuizResult.class), resultId);
+    }
 }
