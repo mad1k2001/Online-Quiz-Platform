@@ -14,7 +14,6 @@ public interface QuizService {
     void updateQuiz(QuizDto quizDto, String email, Long quizzesId);
     Long createQuestionForQuiz(Long quizId, QuestionDto questionDto);
     QuizDto getQuizById(Long quizId);
-
     void solve (Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth);
     void rateQuiz(Long quizId, int correctAnswersCount, int totalQuestionsCount);
 }
