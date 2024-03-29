@@ -2,6 +2,8 @@ package com.example.onlinequizplatform.controller;
 
 import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
+import com.example.onlinequizplatform.dto.QuizResultDto;
+import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("api/quizzes")
 public class QuizController {
     private final QuizService quizService;
+    private final QuizResultService quizResultService;
 
     @GetMapping("")
     public ResponseEntity<List<QuizDto>> getQuizzes() {
@@ -57,6 +60,16 @@ public class QuizController {
     public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, @RequestParam int correctAnswersCount, @RequestParam int totalQuestionsCount) {
         quizService.rateQuiz(quizId, correctAnswersCount, totalQuestionsCount);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{quizId}/results")
+    public ResponseEntity<QuizResultDto> resultQuiz(@PathVariable Long quizId) {
+        QuizResultDto quizResultDto = quizResultService.getQuizResults(quizId);
+        if (quizResultDto != null) {
+            return ResponseEntity.ok(quizResultDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 

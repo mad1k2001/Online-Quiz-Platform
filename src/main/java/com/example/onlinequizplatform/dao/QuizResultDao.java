@@ -1,5 +1,7 @@
 package com.example.onlinequizplatform.dao;
 
+import com.example.onlinequizplatform.dto.OptionDto;
+import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.models.QuizResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -34,5 +36,15 @@ public class QuizResultDao {
                 """;
 
         return jdbcTemplate.queryForObject(sql, Boolean.class, email, quizId);
+    }
+
+    public List<QuestionDto> getQuestionsByQuizId(Long quizId) {
+        String sql = "SELECT * FROM questions WHERE quiz_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuestionDto.class), quizId);
+    }
+
+    public List<OptionDto> getUserAnswersForQuiz(Long quizId) {
+        String sql = "SELECT * FROM options WHERE QUESTION_ID = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(OptionDto.class), quizId);
     }
 }
