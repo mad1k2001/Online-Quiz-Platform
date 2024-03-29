@@ -118,7 +118,9 @@ public class QuizServiceImpl implements QuizService {
                 List<Option> options = optionDao.getOptionsByQuestionId(question.getId());
                 List<OptionDto> optionDtos = new ArrayList<>();
                 for (Option option : options) {
-                    optionDtos.add(makeOptionDto(option));
+                    OptionDto optionDto = makeOptionDto(option);
+                    optionDto.setIsCorrect(null);
+                    optionDtos.add(optionDto);
                 }
                 QuestionDto questionDto = makeQuestionDto(question, optionDtos);
                 questionDtos.add(questionDto);
@@ -128,7 +130,6 @@ public class QuizServiceImpl implements QuizService {
         }
         return null;
     }
-
 
     @Override
     public void solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
