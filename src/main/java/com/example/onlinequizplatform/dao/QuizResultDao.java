@@ -56,6 +56,11 @@ public class QuizResultDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), quizId);
     }
 
+    public List<QuizResult> getQuizResultByUserId(Long userId) {
+        String sql = "SELECT * FROM QUIZ_RESULTS WHERE USER_ID = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), userId);
+    }
+
     public void updateQuizRating(Long quizId, Double rating, Long userId) {
         String sql = "UPDATE QUIZ_RESULTS SET QUIZ_RATING = ? WHERE QUIZ_ID = ? and USER_ID = ?";
         jdbcTemplate.update(sql, rating, quizId, userId);

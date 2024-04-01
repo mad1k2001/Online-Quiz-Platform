@@ -21,10 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,10 +85,23 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     @Override
     public List<QuizResultDto> getQuizLeaderboard(Long quizId) {
+        if (quizId == null) {
+            log.error("Invalid input: quizId is null");
+            throw new CustomException("quizId cannot be null");
+        }
+
         List<QuizResult> quizResults = quizResultDao.getQuizResultsByQuizId(quizId);
+        if (quizResults == null || quizResults.isEmpty()) {
+            log.warn("No quiz results found for quizId={}", quizId);
+            return Collections.emptyList();
+        }
+
         List<QuizResult> sortedResults = quizResults.stream()
                 .sorted(Comparator.comparing(QuizResult::getScore).reversed())
                 .collect(Collectors.toList());
+
+        log.debug("Retrieved and sorted quiz results for quizId={}, totalResults={}", quizId, sortedResults.size());
+
         return mapByQuizResultDto(sortedResults);
     }
 

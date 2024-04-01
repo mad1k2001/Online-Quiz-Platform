@@ -1,17 +1,24 @@
 package com.example.onlinequizplatform.service.impl;
 
+import com.example.onlinequizplatform.dao.QuizResultDao;
 import com.example.onlinequizplatform.dao.UserDao;
 import com.example.onlinequizplatform.dto.UserCreateDto;
 import com.example.onlinequizplatform.dto.UserDto;
+import com.example.onlinequizplatform.dto.UserStatisticsDto;
 import com.example.onlinequizplatform.exeptions.CustomException;
+import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.models.User;
 import com.example.onlinequizplatform.service.AuthorityService;
+import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -19,6 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final QuizResultDao quizResultDao;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityService authorityService;
 
@@ -55,4 +63,37 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public UserStatisticsDto getUserStatistics(Long userId) {
+        List<QuizResult> quizResults = quizResultDao.getQuizResultByUserId(userId);
+
+        int totalQuizzes = quizResults.size();
+        BigDecimal totalScore = BigDecimal.ZERO;
+        BigDecimal maxScore = BigDecimal.ZERO;
+        BigDecimal minScore = BigDecimal.ZERO;
+        for (QuizResult quizResult : quizResults) {
+            BigDecimal score = quizResult.getScore();
+            totalScore = totalScore.add(score);
+            if (score.compareTo(maxScore) > 0) {
+                maxScore = score;
+            }
+            if (score.compareTo(minScore) < 0 || minScore.equals(BigDecimal.ZERO)) {
+                minScore = score;
+            }
+        }
+
+        BigDecimal averageScore = totalQuizzes > 0 ?
+                totalScore.divide(BigDecimal.valueOf(totalQuizzes), 2, RoundingMode.HALF_UP) :
+                BigDecimal.ZERO;
+
+        log.debug("User statistics calculated: userId={}, totalQuizzes={}, averageScore={}, maxScore={}, minScore={}",
+                userId, totalQuizzes, averageScore, maxScore, minScore);
+
+        return UserStatisticsDto.builder()
+                .totalQuizzes(totalQuizzes)
+                .averageScore(averageScore)
+                .maxScore(maxScore)
+                .minScore(minScore)
+                .build();
+    }
 }
