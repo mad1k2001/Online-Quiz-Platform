@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: Create table user_authorities
+      id: Drop table user_authorities
       author: Evgeniia Dashko
       changes:
         - dropTable:
