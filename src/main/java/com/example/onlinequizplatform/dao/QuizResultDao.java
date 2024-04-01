@@ -23,7 +23,6 @@ import java.util.Optional;
 public class QuizResultDao {
     private final JdbcTemplate jdbcTemplate;
 
-
     public List<QuizResult> getResultsByUserEmail(String email){
         String sql = """
                 SELECT * FROM quiz_results q
@@ -52,13 +51,15 @@ public class QuizResultDao {
         return result;
     }
 
+    public List<QuizResult> getQuizResultsByQuizId(Long quizId) {
+        String sql = "SELECT * FROM QUIZ_RESULTS WHERE QUIZ_ID = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), quizId);
+    }
 
     public void updateQuizRating(Long quizId, Double rating, Long userId) {
         String sql = "UPDATE QUIZ_RESULTS SET QUIZ_RATING = ? WHERE QUIZ_ID = ? and USER_ID = ?";
         jdbcTemplate.update(sql, rating, quizId, userId);
     }
-
-
 
     public Long createQuizResult(QuizResult quiz) {
         String sql = """

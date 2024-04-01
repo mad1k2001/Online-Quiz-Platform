@@ -71,6 +71,16 @@ public class QuizController {
 
         return ResponseEntity.ok(quizResult);
     }
+
+    @GetMapping("/{quizId}/leaderboard")
+    public ResponseEntity<List<QuizResultDto>> getQuizLeaderboard(@PathVariable Long quizId) {
+        List<QuizResultDto> leaderboard = quizResultService.getQuizLeaderboard(quizId);
+        if (leaderboard == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(leaderboard);
+    }
+
 }
 
 

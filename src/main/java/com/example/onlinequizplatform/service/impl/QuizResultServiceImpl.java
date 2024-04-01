@@ -22,8 +22,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,6 @@ import java.util.Optional;
 public class QuizResultServiceImpl implements QuizResultService {
     private final QuizResultDao quizResultDao;
     private final UserService userService;
-
 
     @Override
     public List<QuizResultDto> getResultsByUserEmail(String email){
@@ -41,23 +42,6 @@ public class QuizResultServiceImpl implements QuizResultService {
     @Override
     public boolean isAnsweredQuiz(String email, Long id){
         return quizResultDao.isAnswered(email, id);
-    }
-
-    private QuizResultDto mapToDto(QuizResult quizResult) {
-        return QuizResultDto.builder()
-                .id(quizResult.getId())
-                .quizId(quizResult.getQuizId())
-                .score(quizResult.getScore())
-                .userId(quizResult.getUserId())
-                .correctAnswers(quizResult.getCorrectAnswers())
-                .totalQuestions(quizResult.getTotalQuestions())
-                .build();
-    }
-
-    public List<QuizResultDto> mapByQuizResultDto(List<QuizResult> quizResults) {
-        List<QuizResultDto> quizResultDtos = new ArrayList<>();
-        quizResults.forEach(e -> quizResultDtos.add(mapToDto(e)));
-        return quizResultDtos;
     }
 
     @Override
@@ -102,6 +86,15 @@ public class QuizResultServiceImpl implements QuizResultService {
         quizResultDao.updateQuizRating(quizId, rating, currentUser.getId());
     }
 
+    @Override
+    public List<QuizResultDto> getQuizLeaderboard(Long quizId) {
+        List<QuizResult> quizResults = quizResultDao.getQuizResultsByQuizId(quizId);
+        List<QuizResult> sortedResults = quizResults.stream()
+                .sorted(Comparator.comparing(QuizResult::getScore).reversed())
+                .collect(Collectors.toList());
+        return mapByQuizResultDto(sortedResults);
+    }
+
     public Long createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions){
 
         QuizResult quiz= new QuizResult();
@@ -113,5 +106,30 @@ public class QuizResultServiceImpl implements QuizResultService {
 
         return quizResultDao.createQuizResult(quiz);
     }
+
+    private QuizResultDto mapToDto(QuizResult quizResult) {
+        Integer correctAnswers = quizResult.getCorrectAnswers();
+        int correctAnswersValue = correctAnswers != null ? correctAnswers.intValue() : 0;
+
+        Integer totalQuestions = quizResult.getTotalQuestions();
+        int totalQuestionsValue = totalQuestions != null ? totalQuestions.intValue() : 0;
+
+        return QuizResultDto.builder()
+                .id(quizResult.getId())
+                .quizId(quizResult.getQuizId())
+                .score(quizResult.getScore())
+                .userId(quizResult.getUserId())
+                .correctAnswers(correctAnswersValue)
+                .totalQuestions(totalQuestionsValue)
+                .build();
+    }
+
+    public List<QuizResultDto> mapByQuizResultDto(List<QuizResult> quizResults) {
+        List<QuizResultDto> quizResultDtos = new ArrayList<>();
+        quizResults.forEach(e -> quizResultDtos.add(mapToDto(e)));
+        return quizResultDtos;
+    }
+
+
 }
 
