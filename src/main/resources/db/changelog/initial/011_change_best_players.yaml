@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create best players table
+      author: Evgeniia Dashko
+      changes:
+        - addColumn:
+            tableName: best_players
+            columns:
+              - column:
+                  name: position
+                  type: int

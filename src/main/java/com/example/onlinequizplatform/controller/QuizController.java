@@ -4,6 +4,7 @@ import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
 import com.example.onlinequizplatform.dto.QuizResultAnsverDto;
 import com.example.onlinequizplatform.dto.QuizResultDto;
+import com.example.onlinequizplatform.dto.TopPlayersDto;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,19 @@ public class QuizController {
         }
         return ResponseEntity.ok(leaderboard);
     }
+
+    @GetMapping("topFivePlayers")
+    public List<TopPlayersDto> topFivePlayers() {
+        List<TopPlayersDto> topFivePlayers = quizResultService.topFivePlayers();
+        return topFivePlayers;
+    }
+
+    @GetMapping("topTenPlayers")
+    public List<TopPlayersDto> topTenPlayers() {
+        List<TopPlayersDto> topTenPlayers = quizResultService.topTenPlayers();
+        return  topTenPlayers;
+    }
+
 
 }
 

@@ -1,27 +1,26 @@
 package com.example.onlinequizplatform.service.impl;
 
-import com.example.onlinequizplatform.dao.OptionDao;
-import com.example.onlinequizplatform.dao.QuestionDao;
-import com.example.onlinequizplatform.dao.QuizDao;
 import com.example.onlinequizplatform.dao.QuizResultDao;
 import com.example.onlinequizplatform.dto.QuizResultDto;
+import com.example.onlinequizplatform.dto.TopPlayersDto;
 import com.example.onlinequizplatform.dto.UserDto;
 import com.example.onlinequizplatform.exeptions.CustomException;
-import com.example.onlinequizplatform.models.Question;
-import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.models.QuizResult;
+import com.example.onlinequizplatform.models.TopPlayers;
 import com.example.onlinequizplatform.service.QuizResultService;
-import java.math.BigDecimal;
-
 import com.example.onlinequizplatform.service.UserService;
 import lombok.RequiredArgsConstructor;
-import com.example.onlinequizplatform.models.Option;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,6 +104,28 @@ public class QuizResultServiceImpl implements QuizResultService {
         return mapByQuizResultDto(sortedResults);
     }
 
+    @Override
+    public List<TopPlayersDto> topFivePlayers() {
+        return mapTopPlayersDto(quizResultDao.topFivePlayers());
+    }
+
+    @Override
+    public List<TopPlayersDto> topTenPlayers() {
+        return mapTopPlayersDto(quizResultDao.topTenPlayers());
+    }
+
+    public List<TopPlayersDto> mapTopPlayersDto(List<TopPlayers> topPlayers ){
+        List<TopPlayersDto> topPlayersDtos = new ArrayList<>();
+        topPlayers.forEach(e ->
+                        topPlayersDtos.add( TopPlayersDto.builder()
+                                        .score(e.getScore())
+                                        .userName(e.getUserName())
+                                        .userId(e.getUserId())
+                                .build())
+                );
+        return topPlayersDtos;
+    }
+
     public Long createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions){
 
         QuizResult quiz= new QuizResult();
@@ -113,8 +134,11 @@ public class QuizResultServiceImpl implements QuizResultService {
         quiz.setUserId(userId);
         quiz.setCorrectAnswers(correctAnswers);
         quiz.setTotalQuestions(totalQuestions);
+        Long id=quizResultDao.createQuizResult(quiz);
 
-        return quizResultDao.createQuizResult(quiz);
+        quizResultDao.clearBestPlayersTable();
+        quizResultDao.insertTenBestPlayers();
+        return id;
     }
 
     private QuizResultDto mapToDto(QuizResult quizResult) {

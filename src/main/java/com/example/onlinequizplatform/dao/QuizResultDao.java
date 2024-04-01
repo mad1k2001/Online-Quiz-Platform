@@ -4,6 +4,7 @@ import com.example.onlinequizplatform.dto.OptionDto;
 import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.models.QuizResult;
+import com.example.onlinequizplatform.models.TopPlayers;
 import com.example.onlinequizplatform.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
@@ -86,16 +87,35 @@ public class QuizResultDao {
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    public void insertBestResult() {
+    public void clearBestPlayersTable(){
         String clearTable = "delete from BEST_PLAYERS;";
         jdbcTemplate.update(clearTable);
+    }
 
+    public void insertTenBestPlayers() {
         String insertBestPl = """
-                INSERT INTO BEST_PLAYERS (USER_NAME, SCORE, USER_ID)                                      
-                     select top(10)  u.NAME as USER_NAME , sum(score) as SCORE,  u.id as USER_ID from QUIZ_RESULTS q
-                       LEFT JOIN USERS u ON q.USER_ID= u.ID
-                     group by USER_ID
-                """;;
-        jdbcTemplate.update(clearTable);
+                INSERT INTO BEST_PLAYERS (POSITION, USER_NAME, SCORE, USER_ID)
+                    select ROW_NUMBER() Over (Order by u.score desc) As position, u.* from  (
+                        select top(10)   u.NAME as USER_NAME , sum(score) as SCORE,  u.id as USER_ID from QUIZ_RESULTS q                                                                                                                                      LEFT JOIN USERS u ON q.USER_ID= u.ID
+                group by USER_ID
+                ) u
+                """;
+        jdbcTemplate.update(insertBestPl);
+    }
+
+    public List<TopPlayers> topFivePlayers() {
+        String sql =  """
+                select top(5) * from BEST_PLAYERS
+                                     order by SCORE desc
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TopPlayers.class));
+    }
+
+    public List<TopPlayers> topTenPlayers() {
+        String sql =  """
+                select top(10) * from BEST_PLAYERS
+                                     order by SCORE desc
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TopPlayers.class));
     }
 }
