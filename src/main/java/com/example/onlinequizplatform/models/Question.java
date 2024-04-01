@@ -12,4 +12,5 @@ public class Question {
     private Long id;
     private String questionText;
     private Long quizId;
+    private int timeLimit;
 }
