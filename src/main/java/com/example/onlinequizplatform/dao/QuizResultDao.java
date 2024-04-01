@@ -85,4 +85,17 @@ public class QuizResultDao {
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
+
+    public void insertBestResult() {
+        String clearTable = "delete from BEST_PLAYERS;";
+        jdbcTemplate.update(clearTable);
+
+        String insertBestPl = """
+                INSERT INTO BEST_PLAYERS (USER_NAME, SCORE, USER_ID)                                      
+                     select top(10)  u.NAME as USER_NAME , sum(score) as SCORE,  u.id as USER_ID from QUIZ_RESULTS q
+                       LEFT JOIN USERS u ON q.USER_ID= u.ID
+                     group by USER_ID
+                """;;
+        jdbcTemplate.update(clearTable);
+    }
 }

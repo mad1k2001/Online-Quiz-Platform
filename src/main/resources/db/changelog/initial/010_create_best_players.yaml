@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create best players table
+      author: Evgeniia Dashko
+      changes:
+        - createTable:
+            tableName: best_players
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: score
+                  type: real
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: long
+                  constraints:
+                    foreignKeyName: fk_user_id__
+                    references: users(id)
+                    nullable: false
