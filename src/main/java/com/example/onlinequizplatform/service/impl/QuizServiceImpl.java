@@ -150,6 +150,7 @@ public class QuizServiceImpl implements QuizService {
             throw new CustomException(message);
         }
        AtomicInteger isCorrectAnsver= new AtomicInteger();
+       AtomicInteger unCorrectAnsver= new AtomicInteger();
 
         questionSolveDtos.forEach(f->{
             String question=f.getQuestionText();
@@ -160,17 +161,19 @@ public class QuizServiceImpl implements QuizService {
                 throw new CustomException(message);
             }
 
-            f.getAnswers().forEach(an->{
-                Optional<Option> resOp= optionDao.getOptionsByQuestionText(questionRes.get().getId(),an.getOptionText());
+                Optional<Option> resOp= optionDao.getOptionsByQuestionText(questionRes.get().getId(), f.getAnswers());
                 if(resOp.isEmpty()){
-                    String message="This error answer: "+an.getOptionText();
+                    String message="This error answer: "+f.getAnswers();
                     log.error(message);
                     throw new CustomException(message);
                 }
                 if(resOp.get().getIsCorrect()){
                     isCorrectAnsver.getAndIncrement();
                 }
-            });
+                else {
+                    unCorrectAnsver.getAndIncrement();
+                }
+
         });
 
         BigDecimal score = BigDecimal.valueOf(isCorrectAnsver.get())
@@ -182,18 +185,11 @@ public class QuizServiceImpl implements QuizService {
                 .correctAnswers(isCorrectAnsver.get())
                 .score(score)
                 .totalQuestions((int)questions.stream().count())
+                .unCorrectAnswers(unCorrectAnsver.get())
                 .build();
 
     }
 
-    @Override
-    public void rateQuiz(Long quizId, int correctAnswersCount, int totalQuestionsCount) {
-
-        Double rating = (double) correctAnswersCount / totalQuestionsCount * 5.0;
-
-
-        quizResultService.updateQuizRating(quizId, rating);
-    }
 
 
 }

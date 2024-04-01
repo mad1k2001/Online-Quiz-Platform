@@ -16,5 +16,4 @@ public interface QuizService {
     Long createQuestionForQuiz(Long quizId, QuestionDto questionDto);
     QuizDto getQuizById(Long quizId);
     QuizResultAnsverDto solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth);
-    void rateQuiz(Long quizId, int correctAnswersCount, int totalQuestionsCount);
 }

@@ -6,16 +6,12 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Data
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuizResult {
     private Long id;
     private BigDecimal score;
     private Long quizId;
     private Long userId;
-    private int correctAnswers;
-    private int totalQuestions;
-    private int quizRating;
+    private Integer correctAnswers;
+    private Integer totalQuestions;
+    private Integer quizRating;
 }

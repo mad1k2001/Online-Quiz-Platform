@@ -4,7 +4,9 @@ import com.example.onlinequizplatform.dto.OptionDto;
 import com.example.onlinequizplatform.dto.QuestionDto;
 import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.models.QuizResult;
+import com.example.onlinequizplatform.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -43,15 +46,16 @@ public class QuizResultDao {
         return jdbcTemplate.queryForObject(sql, Boolean.class, email, quizId);
     }
 
-    public QuizResult getQuizResultById(Long resultId) {
-        String sql = "SELECT * FROM quiz_results WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(QuizResult.class), resultId);
+    public Optional<QuizResult> getQuizResultById(Long quizId, Long userId) {
+        String sql = "SELECT * FROM QUIZ_RESULTS WHERE QUIZ_ID = ? and USER_ID = ?";
+        var result = Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), quizId, userId)));
+        return result;
     }
 
 
-    public void updateQuizRating(Long quizId, Double rating) {
-        String sql = "UPDATE QUIZ_RESULTS SET QUIZ_RATING = ? WHERE id = ?";
-        jdbcTemplate.update(sql, rating, quizId);
+    public void updateQuizRating(Long quizId, Double rating, Long userId) {
+        String sql = "UPDATE QUIZ_RESULTS SET QUIZ_RATING = ? WHERE QUIZ_ID = ? and USER_ID = ?";
+        jdbcTemplate.update(sql, rating, quizId, userId);
     }
 
 

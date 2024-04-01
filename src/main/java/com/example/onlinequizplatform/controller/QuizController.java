@@ -56,26 +56,20 @@ public class QuizController {
     }
 
     @PostMapping("/{quizId}/rate")
-    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, @RequestParam int correctAnswersCount, @RequestParam int totalQuestionsCount) {
-        quizService.rateQuiz(quizId, correctAnswersCount, totalQuestionsCount);
+    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, Double rating, Authentication auth) {
+        quizResultService.quizRating(quizId, rating, auth);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/quizzes/{quizId}/results")
-    public ResponseEntity<?> getQuizResults(@PathVariable Long quizId) {
-        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId);
+    @GetMapping("/{quizId}/results")
+    public ResponseEntity<QuizResultDto> getQuizResults(@PathVariable Long quizId, Authentication auth) {
+
+        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId, auth);
         if (quizResult == null) {
             return ResponseEntity.notFound().build();
         }
 
-        int totalQuestions = quizResult.getTotalQuestions();
-        int correctAnswers = quizResult.getCorrectAnswers();
-
-        QuizResultDto resultSummary = new QuizResultDto();
-        resultSummary.setTotalQuestions(totalQuestions);
-        resultSummary.setCorrectAnswers(correctAnswers);
-
-        return ResponseEntity.ok(resultSummary);
+        return ResponseEntity.ok(quizResult);
     }
 }
 

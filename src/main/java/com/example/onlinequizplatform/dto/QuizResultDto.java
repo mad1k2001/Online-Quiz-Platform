@@ -18,4 +18,5 @@ public class QuizResultDto {
     private Long userId;
     private int correctAnswers;
     private int totalQuestions;
+    private int quizRating;
 }

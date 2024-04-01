@@ -14,5 +14,6 @@ import java.math.BigDecimal;
 public class QuizResultAnsverDto {
     private BigDecimal score;
     private int correctAnswers;
+    private int unCorrectAnswers;
     private int totalQuestions;
 }

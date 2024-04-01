@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class QuestionSolveDto {
     private String questionText;
-    private List<OptionSolveDto> answers;
+    private String answers;
 }
