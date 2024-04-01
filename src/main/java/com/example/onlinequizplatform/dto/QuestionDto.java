@@ -16,4 +16,5 @@ public class QuestionDto {
     private String questionText;
     private Long quizId;
     private List<OptionDto> option;
+    private int timeLimit;
 }

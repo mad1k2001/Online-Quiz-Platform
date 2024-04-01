@@ -16,9 +16,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Long createQuestion(Question question) {
+        question.setTimeLimit(10);
         return questionDao.createQuestion(question);
     }
-
     @Override
     public Long createOption(Option option) {
         return questionDao.createOption(option);
