@@ -22,12 +22,13 @@ public class QuestionDao {
     private final JdbcTemplate jdbcTemplate;
 
     public Long createQuestion(Question question) {
-        String sql = "INSERT INTO questions (questionText, quizId) VALUES (?, ?)";
+        String sql = "INSERT INTO questions (questionText, quizId, time_limit_in_seconds) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, question.getQuestionText());
             ps.setLong(2, question.getQuizId());
+            ps.setInt(3, question.getTimeLimit());
             return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();

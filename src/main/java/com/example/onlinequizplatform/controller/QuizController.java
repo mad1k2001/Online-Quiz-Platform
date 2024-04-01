@@ -40,9 +40,11 @@ public class QuizController {
 
     @PostMapping("/{quizId}/solve")
     public ResponseEntity<QuizResultAnsverDto> solve(@PathVariable Long quizId,
-                                                     @RequestBody List<QuestionSolveDto> questionSolveDtos, Authentication auth){
-             return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
+                                                     @RequestBody List<QuestionSolveDto> questionSolveDtos,
+                                                     Authentication auth) {
+        return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
     }
+
 
     @GetMapping("/{quizId}")
     public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
