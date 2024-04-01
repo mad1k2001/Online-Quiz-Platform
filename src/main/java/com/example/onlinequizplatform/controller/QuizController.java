@@ -7,6 +7,7 @@ import com.example.onlinequizplatform.dto.QuizResultDto;
 import com.example.onlinequizplatform.dto.TopPlayersDto;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class QuizController {
     }
 
     @PostMapping("add/{email}")
-    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody QuizDto quizDto) {
+    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody @Valid QuizDto quizDto) {
         quizService.createQuiz(quizDto, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
