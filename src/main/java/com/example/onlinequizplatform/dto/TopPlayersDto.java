@@ -15,4 +15,5 @@ public class TopPlayersDto {
     private String userName;
     private BigDecimal score;
     private Long userId;
+    private Integer position;
 }

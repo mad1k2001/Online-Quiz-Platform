@@ -121,6 +121,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                                         .score(e.getScore())
                                         .userName(e.getUserName())
                                         .userId(e.getUserId())
+                                        .position(e.getPosition())
                                 .build())
                 );
         return topPlayersDtos;
