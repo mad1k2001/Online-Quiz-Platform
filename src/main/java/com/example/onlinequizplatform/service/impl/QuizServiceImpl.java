@@ -39,9 +39,25 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public List<QuizDto> getQuizzes() {
         List<Quiz> quizzes = quizDao.getQuizzes();
-        List<QuizDto> dto = new ArrayList<>();
-        quizzes.forEach(e -> dto.add(makeQuizDto(e)));
-        return dto;
+        List<QuizDto> quizDtos = new ArrayList<>();
+        for (Quiz quiz : quizzes) {
+            QuizDto quizDto = makeQuizDto(quiz);
+            List<Question> questions = questionDao.getQuestionsByQuizId(quiz.getId());
+            List<QuestionDto> questionDtos = new ArrayList<>();
+            for (Question question : questions) {
+                List<Option> options = optionDao.getOptionsByQuestionId(question.getId());
+                List<OptionDto> optionDtos = new ArrayList<>();
+                for (Option option : options) {
+                    OptionDto optionDto = makeOptionDto(option);
+                    optionDtos.add(optionDto);
+                }
+                QuestionDto questionDto = makeQuestionDto(question, optionDtos);
+                questionDtos.add(questionDto);
+            }
+            quizDto.setQuestions(questionDtos);
+            quizDtos.add(quizDto);
+        }
+        return quizDtos;
     }
 
     @Override
@@ -58,7 +74,6 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Long createQuestionForQuiz(Long quizId, QuestionDto questionDto) {
-
         Question question = makeQuestion(questionDto, quizId);
         return questionDao.createQuestion(question);
     }
@@ -189,7 +204,5 @@ public class QuizServiceImpl implements QuizService {
                 .build();
 
     }
-
-
 
 }

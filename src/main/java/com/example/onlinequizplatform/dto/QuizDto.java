@@ -18,5 +18,4 @@ public class QuizDto {
     private Long creatorId;
     private List<QuestionDto> questions;
     private Double rating;
-
 }

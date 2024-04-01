@@ -26,7 +26,6 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getQuizzes());
     }
 
-
     @PostMapping("add/{email}")
     public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody QuizDto quizDto) {
         quizService.createQuiz(quizDto, email);
