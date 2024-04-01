@@ -16,8 +16,8 @@ public class AuthorityDao {
 
     public Optional<Authority> getRoles(String role) {
         String sql = """
-                select * from authorities
-                where role = ?;
+                select * from AUTHORITIES
+                where ROLE = ?;
                 """;
         return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Authority.class), role)));
     }

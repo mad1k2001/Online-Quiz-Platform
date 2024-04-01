@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
@@ -25,12 +25,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserCreateDto userCreateDto) {
-        User user = User.builder()
-                .name(userCreateDto.getName())
-                .email(userCreateDto.getEmail())
-                .password(passwordEncoder.encode(userCreateDto.getPassword()))
-                .roleId(authorityService.getRoles("ADMIN").getRole())
-                .build();
+        Optional<User> userCheck = userDao.getUsersByEmail(userCreateDto.getEmail());
+        if(!userCheck.isEmpty()){
+            String error="There is already a user with this email";
+            log.error(error);
+            throw new CustomException(error);
+        }
+        User user = new User();
+        user.setName(userCreateDto.getName());
+        user.setEmail(userCreateDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
+        user.setRoleId(authorityService.getRoles("ADMIN").getId());
 
         userDao.save(user);
     }
@@ -39,7 +44,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email){
         Optional<User> user = userDao.getUsersByEmail(email);
         if(user.isEmpty()){
-            throw new CustomException("User is not found");
+            String error="User is not found";
+            log.error(error);
+            throw new CustomException(error);
         }
         return UserDto.builder()
                 .id(user.get().getId())

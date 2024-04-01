@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: update table users
+      author: Evgeniia Dashko
+      changes:
+        - addColumn:
+            tableName: quiz_results
+            columns:
+              - column:
+                  name: quiz_rating
+                  type: real
+              - column:
+                  name: correct_answers
+                  type: int
+              - column:
+                  name: total_questions
+                  type: int
+

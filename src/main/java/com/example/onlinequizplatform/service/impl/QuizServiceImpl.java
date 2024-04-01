@@ -3,16 +3,13 @@ package com.example.onlinequizplatform.service.impl;
 import com.example.onlinequizplatform.dao.OptionDao;
 import com.example.onlinequizplatform.dao.QuestionDao;
 import com.example.onlinequizplatform.dao.QuizDao;
-import com.example.onlinequizplatform.dto.OptionDto;
-import com.example.onlinequizplatform.dto.QuestionDto;
-import com.example.onlinequizplatform.dto.QuestionSolveDto;
-import com.example.onlinequizplatform.dto.QuizDto;
-import com.example.onlinequizplatform.dto.UserDto;
+import com.example.onlinequizplatform.dto.*;
 import com.example.onlinequizplatform.exeptions.CustomException;
 import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
 
+import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import com.example.onlinequizplatform.service.UserService;
@@ -22,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -132,9 +130,11 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
+    public QuizResultAnsverDto solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
         User user = (User) auth.getPrincipal();
         String authorEmail=user.getUsername();
+
+        UserDto currentUser=userService.getUserByEmail(authorEmail);
 
         List<Question> questions = questionDao.getQuestionsByQuizId(quizId);
         if(questions.stream().count()!=questionSolveDtos.stream().count()){
@@ -149,11 +149,9 @@ public class QuizServiceImpl implements QuizService {
             log.error(message);
             throw new CustomException(message);
         }
-        AtomicInteger countQuestion= new AtomicInteger();
        AtomicInteger isCorrectAnsver= new AtomicInteger();
 
         questionSolveDtos.forEach(f->{
-            countQuestion.getAndIncrement();
             String question=f.getQuestionText();
             Optional<Question> questionRes=questionDao.getQuestionsByQuizIdAndQuestion(quizId, f.getQuestionText());
             if(questionRes.isEmpty()){
@@ -172,20 +170,30 @@ public class QuizServiceImpl implements QuizService {
                 if(resOp.get().getIsCorrect()){
                     isCorrectAnsver.getAndIncrement();
                 }
-
-
             });
-
-
         });
 
-        String test="";
+        BigDecimal score = BigDecimal.valueOf(isCorrectAnsver.get())
+                .divide(BigDecimal.valueOf(questions.stream().count()))
+                .multiply(BigDecimal.valueOf(5));
+
+        quizResultService.createQuizResult(score, quizId, currentUser.getId(), isCorrectAnsver.get(), (int)questions.stream().count());
+        return QuizResultAnsverDto.builder()
+                .correctAnswers(isCorrectAnsver.get())
+                .score(score)
+                .totalQuestions((int)questions.stream().count())
+                .build();
 
     }
 
     @Override
     public void rateQuiz(Long quizId, int correctAnswersCount, int totalQuestionsCount) {
+
         Double rating = (double) correctAnswersCount / totalQuestionsCount * 5.0;
-        quizDao.updateQuizRating(quizId, rating);
+
+
+        quizResultService.updateQuizRating(quizId, rating);
     }
+
+
 }

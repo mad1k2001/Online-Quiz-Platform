@@ -7,12 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Data
-@Builder
 public class User {
     private Long id;
     private String name;
     private String email;
     private String password;
-    private String roleId;
+    private Long roleId;
 }

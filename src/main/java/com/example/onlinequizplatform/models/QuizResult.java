@@ -17,4 +17,5 @@ public class QuizResult {
     private Long userId;
     private int correctAnswers;
     private int totalQuestions;
+    private int quizRating;
 }

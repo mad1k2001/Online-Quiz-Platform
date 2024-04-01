@@ -2,6 +2,7 @@ package com.example.onlinequizplatform.controller;
 
 import com.example.onlinequizplatform.dto.QuestionSolveDto;
 import com.example.onlinequizplatform.dto.QuizDto;
+import com.example.onlinequizplatform.dto.QuizResultAnsverDto;
 import com.example.onlinequizplatform.dto.QuizResultDto;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
@@ -39,11 +40,9 @@ public class QuizController {
     }
 
     @PostMapping("/{quizId}/solve")
-    public ResponseEntity<Void> solve(@PathVariable Long quizId, @RequestBody List<QuestionSolveDto> questionSolveDtos, Authentication auth
-    ){
-        String test= "test";
-        quizService.solve(quizId, questionSolveDtos, auth);
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<QuizResultAnsverDto> solve(@PathVariable Long quizId,
+                                                     @RequestBody List<QuestionSolveDto> questionSolveDtos, Authentication auth){
+             return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
     }
 
     @GetMapping("/{quizId}")

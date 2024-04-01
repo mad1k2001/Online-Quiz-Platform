@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AuthorityServiceImpl implements AuthorityService {
- private AuthorityDao authorityDao;
+    private final AuthorityDao authorityDao;
 
 
     @Override

@@ -23,9 +23,7 @@ import java.util.List;
 @Slf4j
 public class QuizResultServiceImpl implements QuizResultService {
     private final QuizResultDao quizResultDao;
-    private final QuizDao quizDao;
-    private final QuestionDao questionDao;
-    private final OptionDao optionDao;
+
 
     @Override
     public List<QuizResultDto> getResultsByUserEmail(String email){
@@ -59,6 +57,22 @@ public class QuizResultServiceImpl implements QuizResultService {
             return null;
         }
         return mapToDto(quizResult);
+    }
+
+    @Override
+    public void updateQuizRating(Long quizId, Double rating) {
+        quizResultDao.updateQuizRating(quizId, rating);
+    }
+
+    public Long createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions){
+
+        return quizResultDao.createQuizResult(QuizResult.builder()
+                        .score(score)
+                        .quizId(quizId)
+                        .userId(userId)
+                        .correctAnswers(correctAnswers)
+                        .totalQuestions(totalQuestions)
+                .build());
     }
 }
 
