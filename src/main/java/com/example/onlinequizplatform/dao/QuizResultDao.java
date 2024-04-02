@@ -1,11 +1,7 @@
 package com.example.onlinequizplatform.dao;
 
-import com.example.onlinequizplatform.dto.OptionDto;
-import com.example.onlinequizplatform.dto.QuestionDto;
-import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.models.TopPlayers;
-import com.example.onlinequizplatform.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

@@ -1,17 +1,12 @@
 package com.example.onlinequizplatform.dao;
 
-import com.example.onlinequizplatform.models.Quiz;
 import com.example.onlinequizplatform.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component

@@ -1,7 +1,6 @@
 package com.example.onlinequizplatform.dao;
 
 import com.example.onlinequizplatform.models.Option;
-import com.example.onlinequizplatform.models.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -11,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

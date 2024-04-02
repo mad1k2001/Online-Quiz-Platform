@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionSolveDto {
-    @NotBlank(message = "field not filled in questionText")
-    private String questionText;
-    @NotBlank(message = "field not filled in answers")
-    private String answers;
+public class CategoryDto {
+    private Long id;
+    @NotBlank
+    private String name;
 }
