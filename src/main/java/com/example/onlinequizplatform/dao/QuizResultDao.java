@@ -1,5 +1,6 @@
 package com.example.onlinequizplatform.dao;
 
+import com.example.onlinequizplatform.dto.QuizResultDto;
 import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.models.TopPlayers;
 import lombok.RequiredArgsConstructor;
@@ -113,5 +114,9 @@ public class QuizResultDao {
                                      order by SCORE desc
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TopPlayers.class));
+    }
+    public List<QuizResultDto> getQuizResultsByQuizIdWithPagination(Long quizId, int offset, int size) {
+        String sql = "SELECT * FROM quiz_results WHERE quiz_id = ? LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResultDto.class), quizId, size, offset);
     }
 }

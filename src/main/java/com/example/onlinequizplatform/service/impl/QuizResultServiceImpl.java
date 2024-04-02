@@ -41,20 +41,7 @@ public class QuizResultServiceImpl implements QuizResultService {
         return quizResultDao.isAnswered(email, id);
     }
 
-    @Override
-    public QuizResultDto getQuizResultById(Long resultId, Authentication auth) {
-        User user = (User) auth.getPrincipal();
 
-        UserDto currentUser=userService.getUserByEmail(user.getUsername());
-
-        Optional<QuizResult> quizResult = quizResultDao.getQuizResultById(resultId, currentUser.getId());
-        if (quizResult.isEmpty()) {
-            String message="You haven't answered this quiz";
-            log.error(message);
-            throw new CustomException(message);
-        }
-        return mapToDto(quizResult.get());
-    }
 
     @Override
     public void quizRating(Long quizId, Double rating, Authentication auth) {
@@ -163,6 +150,12 @@ public class QuizResultServiceImpl implements QuizResultService {
         List<QuizResultDto> quizResultDtos = new ArrayList<>();
         quizResults.forEach(e -> quizResultDtos.add(mapToDto(e)));
         return quizResultDtos;
+    }
+    @Override
+    public List<QuizResultDto> getQuizResultsWithPagination(Long quizId, int page, int size) {
+        int offset = page * size;
+        List<QuizResultDto> quizResults = quizResultDao.getQuizResultsByQuizIdWithPagination(quizId, offset, size);
+        return quizResults;
     }
 }
 

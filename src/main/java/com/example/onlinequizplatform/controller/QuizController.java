@@ -68,14 +68,12 @@ public class QuizController {
     }
 
     @GetMapping("/{quizId}/results")
-    public ResponseEntity<QuizResultDto> getQuizResults(@PathVariable Long quizId, Authentication auth) {
-
-        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId, auth);
-        if (quizResult == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(quizResult);
+    public ResponseEntity<List<QuizResultDto>> getQuizResultsWithPagination(
+            @PathVariable Long quizId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<QuizResultDto> quizResults = quizResultService.getQuizResultsWithPagination(quizId, page, size);
+        return ResponseEntity.ok(quizResults);
     }
 
     @GetMapping("/{quizId}/leaderboard")
@@ -98,6 +96,7 @@ public class QuizController {
         List<TopPlayersDto> topTenPlayers = quizResultService.topTenPlayers();
         return  topTenPlayers;
     }
+
     @GetMapping("/{quizId}/questions")
     public ResponseEntity<List<QuestionDto>> getQuestionsByQuizIdWithPagination(
             @PathVariable Long quizId,
