@@ -5,6 +5,7 @@ import com.example.onlinequizplatform.dto.QuizResultDto;
 import com.example.onlinequizplatform.dto.TopPlayersDto;
 import com.example.onlinequizplatform.dto.UserDto;
 import com.example.onlinequizplatform.exeptions.CustomException;
+import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.models.TopPlayers;
 import com.example.onlinequizplatform.service.QuizResultService;
@@ -128,7 +129,6 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     public Long createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions){
-
         QuizResult quiz= new QuizResult();
         quiz.setScore(score);
         quiz.setQuizId(quizId);

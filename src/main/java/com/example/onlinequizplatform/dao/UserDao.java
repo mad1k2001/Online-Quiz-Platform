@@ -19,7 +19,6 @@ import java.util.Optional;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
 
-
     public void save(User user) {
         String sql = "INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?,?)";
         jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getRoleId());

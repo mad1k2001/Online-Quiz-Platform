@@ -9,7 +9,6 @@ import com.example.onlinequizplatform.models.Option;
 import com.example.onlinequizplatform.models.Question;
 import com.example.onlinequizplatform.models.Quiz;
 
-import com.example.onlinequizplatform.models.QuizResult;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import com.example.onlinequizplatform.service.UserService;
@@ -61,21 +60,56 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Long createQuiz(QuizDto quizDto, String email) {
+    public Long createQuiz(QuizDto quizDto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        UserDto currentUser=userService.getUserByEmail(user.getUsername());
+        if (user == null) {
+            throw new CustomException("User not found");
+        }
+
         Quiz quiz = makeQuiz(quizDto);
-        return quizDao.createQuiz(quiz);
+        quiz.setCreatorId(currentUser.getId());
+
+        Long quizId = quizDao.createQuiz(quiz);
+
+        if (quizDto.getQuestions() != null) {
+            for (QuestionDto questionDto : quizDto.getQuestions()) {
+                Long questionId = createQuestionForQuiz(quizId, questionDto);
+            }
+        }
+
+        return quizId;
     }
 
     @Override
-    public void updateQuiz(QuizDto quizDto, String email, Long quizzesId){
+    public void updateQuiz(QuizDto quizDto, Authentication authentication, Long quizId) {
+        User user = (User) authentication.getPrincipal();
+        UserDto currentUser=userService.getUserByEmail(user.getUsername());
+        if (user == null) {
+            throw new CustomException("User not found");
+        }
+
         Quiz quiz = makeQuiz(quizDto);
+        quiz.setId(quizId);
+        quiz.setCreatorId(currentUser.getId());
+
         quizDao.updateQuiz(quiz);
+
+        if (quizDto.getQuestions() != null) {
+            for (QuestionDto questionDto : quizDto.getQuestions()) {
+                updateQuestionForQuiz(quizId, questionDto);
+            }
+        }
     }
 
-    @Override
     public Long createQuestionForQuiz(Long quizId, QuestionDto questionDto) {
         Question question = makeQuestion(questionDto, quizId);
         return questionDao.createQuestion(question);
+    }
+
+    public void updateQuestionForQuiz(Long quizId, QuestionDto questionDto){
+        Question question = makeQuestion(questionDto,quizId);
+        questionDao.updateQuestion(question);
     }
 
     private Quiz makeQuiz(QuizDto quizDto){
@@ -204,5 +238,4 @@ public class QuizServiceImpl implements QuizService {
                 .build();
 
     }
-
 }

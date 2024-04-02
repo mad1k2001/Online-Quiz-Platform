@@ -11,9 +11,8 @@ import java.util.List;
 
 public interface QuizService {
     List<QuizDto> getQuizzes();
-    Long createQuiz(QuizDto quizDto, String email);
-    void updateQuiz(QuizDto quizDto, String email, Long quizzesId);
-    Long createQuestionForQuiz(Long quizId, QuestionDto questionDto);
+    Long createQuiz(QuizDto quizDto, Authentication authentication);
+    void updateQuiz(QuizDto quizDto, Authentication authentication, Long quizId);
     QuizDto getQuizById(Long quizId);
     QuizResultAnsverDto solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth);
 }

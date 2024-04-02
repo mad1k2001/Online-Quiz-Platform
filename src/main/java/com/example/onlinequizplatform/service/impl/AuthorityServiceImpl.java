@@ -16,7 +16,6 @@ import java.util.Optional;
 public class AuthorityServiceImpl implements AuthorityService {
     private final AuthorityDao authorityDao;
 
-
     @Override
     public AuthorityDto getRoles(String role) {
         Optional<Authority> authority = authorityDao.getRoles(role);

@@ -34,15 +34,15 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getQuizzes());
     }
 
-    @PostMapping("add/{email}")
-    public ResponseEntity<QuizDto> createQuiz(@PathVariable String email, @RequestBody @Valid QuizDto quizDto) {
-        quizService.createQuiz(quizDto, email);
+    @PostMapping("add")
+    public ResponseEntity<QuizDto> createQuiz(Authentication authentication, @RequestBody @Valid QuizDto quizDto) {
+        quizService.createQuiz(quizDto, authentication);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    @PutMapping("/edit/{email}/quizzes/{quizzesId}")
-    public HttpStatus updateQuiz(@PathVariable String email, @PathVariable Long quizzesId, @RequestBody QuizDto quizDto){
-        quizService.updateQuiz(quizDto,email,quizzesId);
+    @PutMapping("/edit/quizzes/{quizzesId}")
+    public HttpStatus updateQuiz(Authentication authentication, @PathVariable Long quizzesId, @RequestBody QuizDto quizDto){
+        quizService.updateQuiz(quizDto, authentication, quizzesId);
         return HttpStatus.OK;
     }
 
@@ -52,7 +52,6 @@ public class QuizController {
                                                      Authentication auth) {
         return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
     }
-
 
     @GetMapping("/{quizId}")
     public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
@@ -105,8 +104,6 @@ public class QuizController {
         List<TopPlayersDto> topTenPlayers = quizResultService.topTenPlayers();
         return  topTenPlayers;
     }
-
-
 }
 
 
