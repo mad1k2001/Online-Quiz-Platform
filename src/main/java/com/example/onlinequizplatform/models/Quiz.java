@@ -13,4 +13,5 @@ public class Quiz {
     private String title;
     private String description;
     private Long creatorId;
+    private Long categoryId;
 }

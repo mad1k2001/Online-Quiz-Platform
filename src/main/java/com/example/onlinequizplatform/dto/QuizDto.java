@@ -16,6 +16,7 @@ public class QuizDto {
     private String title;
     private String description;
     private Long creatorId;
+    private Long categoryId;
     private List<QuestionDto> questions;
     private Double rating;
 }

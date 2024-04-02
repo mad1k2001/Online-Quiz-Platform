@@ -30,8 +30,8 @@ public class QuizDao {
 
     public Long createQuiz(Quiz quiz) {
         String sql = """
-                INSERT INTO quizzes(title, desсription, creatorId)
-                values (?,?,?)
+                INSERT INTO quizzes(title, desсription, creatorId, CATEGORY_ID)
+                values (?,?,?,?)
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -40,6 +40,7 @@ public class QuizDao {
             ps.setString(1, quiz.getTitle());
             ps.setString(2, quiz.getDescription());
             ps.setLong(3, quiz.getCreatorId());
+            ps.setLong(4, quiz.getCategoryId());
             return ps;
         }, keyHolder);
 
@@ -56,13 +57,15 @@ public class QuizDao {
                 UPDATE quizzes
                 SET title = :title,
                 description = :description,
-                creatorId = :creatorId
+                creatorId = :creatorId,
+                categoryId = :categoryId
                 WHERE id = :id
                 """;
         jdbcTemplate.update(sql, new MapSqlParameterSource()
                 .addValue("title", quiz.getTitle())
                 .addValue("description", quiz.getDescription())
-                .addValue("creatorId", quiz.getDescription()));
+                .addValue("creatorId", quiz.getDescription())
+                .addValue("categoryId", quiz.getCategoryId()));
     }
 
 }

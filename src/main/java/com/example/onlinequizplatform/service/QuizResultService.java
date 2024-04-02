@@ -14,7 +14,6 @@ public interface QuizResultService {
     void quizRating(Long quizId, Double rating, Authentication auth);
     Long  createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions);
     List<QuizResultDto> getQuizLeaderboard(Long quizId);
-
     List<TopPlayersDto> topFivePlayers();
     List<TopPlayersDto> topTenPlayers();
 }

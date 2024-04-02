@@ -29,7 +29,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
     private final OptionDao optionDao;
-
     private final UserService userService;
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
@@ -117,6 +116,7 @@ public class QuizServiceImpl implements QuizService {
                 .title(quizDto.getTitle())
                 .description(quizDto.getDescription())
                 .creatorId(quizDto.getCreatorId())
+                .categoryId(quizDto.getCategoryId())
                 .build();
     }
 
@@ -126,6 +126,7 @@ public class QuizServiceImpl implements QuizService {
                 .title(quiz.getTitle())
                 .description(quiz.getDescription())
                 .creatorId(quiz.getCreatorId())
+                .categoryId(quiz.getCategoryId())
                 .build();
     }
 
@@ -236,6 +237,5 @@ public class QuizServiceImpl implements QuizService {
                 .totalQuestions((int)questions.stream().count())
                 .unCorrectAnswers(unCorrectAnsver.get())
                 .build();
-
     }
 }
