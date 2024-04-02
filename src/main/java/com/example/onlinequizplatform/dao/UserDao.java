@@ -13,12 +13,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
-
     public void save(User user) {
         String sql = "INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?,?)";
         jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getRoleId());
     }
-
     public Optional<User> getUsersByEmail(String email) {
         String sql = """
                 SELECT * FROM USERS 
@@ -26,5 +24,4 @@ public class UserDao {
                 """;
         var result = Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)));
         return result;
-    }
-}
+    }}

@@ -10,10 +10,10 @@ import java.util.List;
 public interface QuizResultService {
     List<QuizResultDto> getResultsByUserEmail(String email);
     boolean isAnsweredQuiz(String email, Long id);
-    QuizResultDto getQuizResultById(Long resultId, Authentication auth);
     void quizRating(Long quizId, Double rating, Authentication auth);
     Long  createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions);
     List<QuizResultDto> getQuizLeaderboard(Long quizId);
     List<TopPlayersDto> topFivePlayers();
     List<TopPlayersDto> topTenPlayers();
+    List<QuizResultDto> getQuizResultsWithPagination(Long quizId, int page, int size);
 }

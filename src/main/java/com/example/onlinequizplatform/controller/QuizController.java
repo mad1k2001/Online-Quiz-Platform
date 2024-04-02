@@ -1,10 +1,6 @@
 package com.example.onlinequizplatform.controller;
 
-import com.example.onlinequizplatform.dto.QuestionSolveDto;
-import com.example.onlinequizplatform.dto.QuizDto;
-import com.example.onlinequizplatform.dto.QuizResultAnsverDto;
-import com.example.onlinequizplatform.dto.QuizResultDto;
-import com.example.onlinequizplatform.dto.TopPlayersDto;
+import com.example.onlinequizplatform.dto.*;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import jakarta.validation.Valid;
@@ -45,9 +41,7 @@ public class QuizController {
     }
 
     @PostMapping("/{quizId}/solve")
-    public ResponseEntity<QuizResultAnsverDto> solve(@PathVariable Long quizId,
-                                                     @Valid @RequestBody  List<QuestionSolveDto> questionSolveDtos,
-                                                     Authentication auth) {
+    public ResponseEntity<QuizResultAnsverDto> solve(@PathVariable Long quizId, @Valid @RequestBody  List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
         return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
     }
 
@@ -62,24 +56,16 @@ public class QuizController {
     }
 
     @PostMapping("/{quizId}/rate")
-    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId,
-                                         @Min(value = 1, message = "minimum value 1")
-                                         @Max(value = 5, message = "maximum value 5")
-                                         Double rating,
-                Authentication auth) {
+    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, @Min(value = 1, message = "minimum value 1")
+                                         @Max(value = 5, message = "maximum value 5") Double rating, Authentication auth) {
         quizResultService.quizRating(quizId, rating, auth);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{quizId}/results")
-    public ResponseEntity<QuizResultDto> getQuizResults(@PathVariable Long quizId, Authentication auth) {
-
-        QuizResultDto quizResult = quizResultService.getQuizResultById(quizId, auth);
-        if (quizResult == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(quizResult);
+    public ResponseEntity<List<QuizResultDto>> getQuizResultsWithPagination(@PathVariable Long quizId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        List<QuizResultDto> quizResults = quizResultService.getQuizResultsWithPagination(quizId, page, size);
+        return ResponseEntity.ok(quizResults);
     }
 
     @GetMapping("/{quizId}/leaderboard")
@@ -102,6 +88,11 @@ public class QuizController {
         List<TopPlayersDto> topTenPlayers = quizResultService.topTenPlayers();
         return  topTenPlayers;
     }
-}
+
+    @GetMapping("/{quizId}/questions")
+    public ResponseEntity<List<QuestionDto>> getQuestionsByQuizIdWithPagination(@PathVariable Long quizId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        List<QuestionDto> questions = quizService.getQuestionsByQuizIdWithPagination(quizId, page, size);
+        return ResponseEntity.ok(questions);
+    }}
 
 

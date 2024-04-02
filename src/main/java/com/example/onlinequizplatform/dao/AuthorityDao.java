@@ -13,13 +13,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorityDao {
     private final JdbcTemplate jdbcTemplate;
-
     public Optional<Authority> getRoles(String role) {
         String sql = """
                 select * from AUTHORITIES
                 where ROLE = ?;
                 """;
         return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Authority.class), role)));
-    }
-
-}
+    }}

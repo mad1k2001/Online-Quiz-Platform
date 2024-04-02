@@ -17,14 +17,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class QuizDao {
     private final JdbcTemplate jdbcTemplate;
-
     public List<Quiz> getQuizzes() {
         String sql = """
                 select * from quizzes
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Quiz.class));
     }
-
     public Long createQuiz(Quiz quiz) {
         String sql = """
                 INSERT INTO quizzes(title, desсription, creatorId, CATEGORY_ID)
@@ -43,12 +41,10 @@ public class QuizDao {
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
     public Quiz getQuizById(Long quizId) {
         String sql = "SELECT * FROM quizzes WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Quiz.class), quizId);
     }
-
     public void updateQuiz(Quiz quiz) {
         String sql = """
                 UPDATE quizzes
@@ -63,5 +59,4 @@ public class QuizDao {
                 .addValue("description", quiz.getDescription())
                 .addValue("creatorId", quiz.getDescription())
                 .addValue("categoryId", quiz.getCategoryId()));
-    }
-}
+    }}

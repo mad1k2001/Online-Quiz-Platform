@@ -35,27 +35,10 @@ public class QuizResultServiceImpl implements QuizResultService {
     public List<QuizResultDto> getResultsByUserEmail(String email){
         return mapByQuizResultDto(quizResultDao.getResultsByUserEmail(email));
     }
-
     @Override
     public boolean isAnsweredQuiz(String email, Long id){
         return quizResultDao.isAnswered(email, id);
     }
-
-    @Override
-    public QuizResultDto getQuizResultById(Long resultId, Authentication auth) {
-        User user = (User) auth.getPrincipal();
-
-        UserDto currentUser=userService.getUserByEmail(user.getUsername());
-
-        Optional<QuizResult> quizResult = quizResultDao.getQuizResultById(resultId, currentUser.getId());
-        if (quizResult.isEmpty()) {
-            String message="You haven't answered this quiz";
-            log.error(message);
-            throw new CustomException(message);
-        }
-        return mapToDto(quizResult.get());
-    }
-
     @Override
     public void quizRating(Long quizId, Double rating, Authentication auth) {
         User user = (User) auth.getPrincipal();
@@ -82,7 +65,6 @@ public class QuizResultServiceImpl implements QuizResultService {
 
         quizResultDao.updateQuizRating(quizId, rating, currentUser.getId());
     }
-
     @Override
     public List<QuizResultDto> getQuizLeaderboard(Long quizId) {
         if (quizId == null) {
@@ -104,17 +86,14 @@ public class QuizResultServiceImpl implements QuizResultService {
 
         return mapByQuizResultDto(sortedResults);
     }
-
     @Override
     public List<TopPlayersDto> topFivePlayers() {
         return mapTopPlayersDto(quizResultDao.topFivePlayers());
     }
-
     @Override
     public List<TopPlayersDto> topTenPlayers() {
         return mapTopPlayersDto(quizResultDao.topTenPlayers());
     }
-
     public List<TopPlayersDto> mapTopPlayersDto(List<TopPlayers> topPlayers ){
         List<TopPlayersDto> topPlayersDtos = new ArrayList<>();
         topPlayers.forEach(e ->
@@ -127,7 +106,6 @@ public class QuizResultServiceImpl implements QuizResultService {
                 );
         return topPlayersDtos;
     }
-
     public Long createQuizResult(BigDecimal score, Long quizId, Long userId, int correctAnswers, int totalQuestions){
         QuizResult quiz= new QuizResult();
         quiz.setScore(score);
@@ -141,7 +119,6 @@ public class QuizResultServiceImpl implements QuizResultService {
         quizResultDao.insertTenBestPlayers();
         return id;
     }
-
     private QuizResultDto mapToDto(QuizResult quizResult) {
         Integer correctAnswers = quizResult.getCorrectAnswers();
         int correctAnswersValue = correctAnswers != null ? correctAnswers.intValue() : 0;
@@ -158,13 +135,16 @@ public class QuizResultServiceImpl implements QuizResultService {
                 .totalQuestions(totalQuestionsValue)
                 .build();
     }
-
     public List<QuizResultDto> mapByQuizResultDto(List<QuizResult> quizResults) {
         List<QuizResultDto> quizResultDtos = new ArrayList<>();
         quizResults.forEach(e -> quizResultDtos.add(mapToDto(e)));
         return quizResultDtos;
     }
-
-
+    @Override
+    public List<QuizResultDto> getQuizResultsWithPagination(Long quizId, int page, int size) {
+        int offset = page * size;
+        List<QuizResultDto> quizResults = quizResultDao.getQuizResultsByQuizIdWithPagination(quizId, offset, size);
+        return quizResults;
+    }
 }
 

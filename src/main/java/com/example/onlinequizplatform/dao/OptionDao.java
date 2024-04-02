@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OptionDao {
     private final JdbcTemplate jdbcTemplate;
-
     public Long createOption(Option option) {
         String sql = "INSERT INTO options (optionText, isCorrect, questionId) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -31,21 +30,17 @@ public class OptionDao {
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
     public void updateOption(Option option) {
         String sql = "UPDATE options SET optionText = ?, isCorrect = ? WHERE id = ?";
         jdbcTemplate.update(sql, option.getOptionText(), option.getIsCorrect(), option.getId());
     }
-
     public List<Option> getOptionsByQuestionId(Long questionId) {
         String sql = "SELECT * FROM options WHERE question_Id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class), questionId);
     }
-
     public Optional<Option> getOptionsByQuestionText(Long questionId, String ansver) {
         String sql = "SELECT * FROM options WHERE  question_Id = ? and option_text = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Option.class),
                         questionId,  ansver)));
-    }
-}
+    }}

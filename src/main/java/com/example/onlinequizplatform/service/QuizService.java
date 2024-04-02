@@ -15,4 +15,5 @@ public interface QuizService {
     void updateQuiz(QuizDto quizDto, Authentication authentication, Long quizId);
     QuizDto getQuizById(Long quizId);
     QuizResultAnsverDto solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth);
+    List<QuestionDto> getQuestionsByQuizIdWithPagination(Long quizId, int page, int size);
 }

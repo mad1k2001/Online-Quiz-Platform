@@ -15,9 +15,7 @@ public class OptionServiceImpl implements OptionService {
     public Long createOption(Option option) {
         return optionDao.createOption(option);
     }
-
     @Override
     public void updateOption(Option option) {
         optionDao.updateOption(option);
-    }
-}
+    }}

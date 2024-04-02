@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,7 +14,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     private final ErrorService error;
 
     @ExceptionHandler(NoSuchElementException.class)
@@ -31,5 +29,4 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity validHandler(ConstraintViolationException ex) {
         return new ResponseEntity<>(error.makeResponseEx( ex), HttpStatus.BAD_REQUEST);
-    }
-}
+    }}
