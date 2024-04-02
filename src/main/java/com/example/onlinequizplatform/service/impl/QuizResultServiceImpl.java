@@ -164,7 +164,5 @@ public class QuizResultServiceImpl implements QuizResultService {
         quizResults.forEach(e -> quizResultDtos.add(mapToDto(e)));
         return quizResultDtos;
     }
-
-
 }
 

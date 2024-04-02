@@ -1,10 +1,6 @@
 package com.example.onlinequizplatform.controller;
 
-import com.example.onlinequizplatform.dto.QuestionSolveDto;
-import com.example.onlinequizplatform.dto.QuizDto;
-import com.example.onlinequizplatform.dto.QuizResultAnsverDto;
-import com.example.onlinequizplatform.dto.QuizResultDto;
-import com.example.onlinequizplatform.dto.TopPlayersDto;
+import com.example.onlinequizplatform.dto.*;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import jakarta.validation.Valid;
@@ -101,6 +97,14 @@ public class QuizController {
     public List<TopPlayersDto> topTenPlayers() {
         List<TopPlayersDto> topTenPlayers = quizResultService.topTenPlayers();
         return  topTenPlayers;
+    }
+    @GetMapping("/{quizId}/questions")
+    public ResponseEntity<List<QuestionDto>> getQuestionsByQuizIdWithPagination(
+            @PathVariable Long quizId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<QuestionDto> questions = quizService.getQuestionsByQuizIdWithPagination(quizId, page, size);
+        return ResponseEntity.ok(questions);
     }
 }
 

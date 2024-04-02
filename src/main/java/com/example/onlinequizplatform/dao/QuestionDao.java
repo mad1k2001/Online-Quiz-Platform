@@ -60,4 +60,8 @@ public class QuestionDao {
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class),
                         quizId, question)));
     }
+    public List<Question> getQuestionsByQuizIdWithPagination(Long quizId, int offset, int size) {
+        String sql = "SELECT * FROM questions WHERE quiz_Id = ? LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), quizId, size, offset);
+    }
 }

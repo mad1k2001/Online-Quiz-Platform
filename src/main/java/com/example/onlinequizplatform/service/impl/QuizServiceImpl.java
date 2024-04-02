@@ -238,4 +238,23 @@ public class QuizServiceImpl implements QuizService {
                 .unCorrectAnswers(unCorrectAnsver.get())
                 .build();
     }
+
+    @Override
+    public List<QuestionDto> getQuestionsByQuizIdWithPagination(Long quizId, int page, int size) {
+        int offset = page * size;
+        List<Question> questions = questionDao.getQuestionsByQuizIdWithPagination(quizId, offset, size);
+        List<QuestionDto> questionDtos = new ArrayList<>();
+        for (Question question : questions) {
+            List<Option> options = optionDao.getOptionsByQuestionId(question.getId());
+            List<OptionDto> optionDtos = new ArrayList<>();
+            for (Option option : options) {
+                OptionDto optionDto = makeOptionDto(option);
+                optionDtos.add(optionDto);
+            }
+            QuestionDto questionDto = makeQuestionDto(question, optionDtos);
+            questionDtos.add(questionDto);
+        }
+        return questionDtos;
+    }
+
 }
