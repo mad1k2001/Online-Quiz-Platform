@@ -1,9 +1,11 @@
 package com.example.onlinequizplatform.exeptions;
 
 import com.example.onlinequizplatform.service.ErrorService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,5 +26,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity validHandler(MethodArgumentNotValidException ex) {
         return new ResponseEntity<>(error.makeResponseBind(ex), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity validHandler(ConstraintViolationException ex) {
+        return new ResponseEntity<>(error.makeResponseEx( ex), HttpStatus.BAD_REQUEST);
     }
 }

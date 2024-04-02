@@ -8,14 +8,20 @@ import com.example.onlinequizplatform.dto.TopPlayersDto;
 import com.example.onlinequizplatform.service.QuizResultService;
 import com.example.onlinequizplatform.service.QuizService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/quizzes")
@@ -42,7 +48,7 @@ public class QuizController {
 
     @PostMapping("/{quizId}/solve")
     public ResponseEntity<QuizResultAnsverDto> solve(@PathVariable Long quizId,
-                                                     @RequestBody List<QuestionSolveDto> questionSolveDtos,
+                                                     @Valid @RequestBody  List<QuestionSolveDto> questionSolveDtos,
                                                      Authentication auth) {
         return ResponseEntity.ok(quizService.solve(quizId, questionSolveDtos, auth));
     }
@@ -59,7 +65,11 @@ public class QuizController {
     }
 
     @PostMapping("/{quizId}/rate")
-    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId, Double rating, Authentication auth) {
+    public ResponseEntity<Void> rateQuiz(@PathVariable Long quizId,
+                                         @Min(value = 1, message = "minimum value 1")
+                                         @Max(value = 5, message = "maximum value 5")
+                                         Double rating,
+                Authentication auth) {
         quizResultService.quizRating(quizId, rating, auth);
         return ResponseEntity.ok().build();
     }
