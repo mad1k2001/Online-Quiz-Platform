@@ -19,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionDao {
     private final JdbcTemplate jdbcTemplate;
-
     public Long createQuestion(Question question) {
         String sql = "INSERT INTO questions (questionText, quizId, time_limit_in_seconds) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -32,7 +31,6 @@ public class QuestionDao {
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
     public Long createOption(Option option) {
         String sql = "INSERT INTO options (optionText, isCorrect, questionId) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -53,7 +51,6 @@ public class QuestionDao {
         String sql = "SELECT * FROM questions WHERE quiz_Id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), quizId);
     }
-
     public Optional<Question> getQuestionsByQuizIdAndQuestion(Long quizId, String  question) {
         String sql = "SELECT * FROM questions WHERE quiz_Id = ? and QUESTION_TEXT = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
@@ -63,5 +60,4 @@ public class QuestionDao {
     public List<Question> getQuestionsByQuizIdWithPagination(Long quizId, int offset, int size) {
         String sql = "SELECT * FROM questions WHERE quiz_Id = ? LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), quizId, size, offset);
-    }
-}
+    }}

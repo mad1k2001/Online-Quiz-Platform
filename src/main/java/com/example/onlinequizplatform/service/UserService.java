@@ -6,7 +6,6 @@ import com.example.onlinequizplatform.dto.UserStatisticsDto;
 
 public interface UserService {
     void registerUser(UserCreateDto userCreateDto);
-
     UserDto getUserByEmail(String email);
     UserStatisticsDto getUserStatistics(Long userId);
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
     private final JdbcTemplate jdbcTemplate;
-
     @Override
     public Long createQuestion(Question question) {
         question.setTimeLimit(10);
@@ -23,7 +22,6 @@ public class QuestionServiceImpl implements QuestionService {
     public Long createOption(Option option) {
         return questionDao.createOption(option);
     }
-
     @Override
     public void updateQuestion(Question question) {
         questionDao.updateQuestion(question);

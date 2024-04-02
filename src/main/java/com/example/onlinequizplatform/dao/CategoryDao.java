@@ -18,14 +18,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryDao {
     private final JdbcTemplate jdbcTemplate;
-
     public List<Category> getCategory() {
         String sql = """
                 select * from categories
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class));
     }
-
     public Long createCategory(Category category) {
         String sql = """
                 INSERT INTO quizzes(name)
@@ -41,7 +39,6 @@ public class CategoryDao {
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
     public void updateCategory(Category category) {
         String sql = """
                 UPDATE CATEGORIES
@@ -51,7 +48,6 @@ public class CategoryDao {
         jdbcTemplate.update(sql, new MapSqlParameterSource()
                 .addValue("name", category.getName()));
     }
-
     public Optional<Category> getCategoryById(Long id){
         String sql = """
                 SELECT * FROM categories WHERE id = ?
@@ -59,5 +55,4 @@ public class CategoryDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), id)
                 .stream()
                 .findFirst();
-    }
-}
+    }}

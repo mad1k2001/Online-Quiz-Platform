@@ -24,7 +24,6 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categories = categoryDao.getCategory();
         return getCategoryDto(categories);
     }
-
     @Override
     public Optional<CategoryDto> getCategoryById(Long id) throws CustomException {
         return categoryDao.getCategoryById(id)
@@ -32,13 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(Optional::of)
                 .orElseThrow(() -> new CustomException("Can't find category with id: " + id));
     }
-
     @Override
     public Long createCategory(CategoryDto categoryDto, Authentication authentication){
         Category category = makeCategory(categoryDto);
         return categoryDao.createCategory(category);
     }
-
     @Override
     public void updateCategory(CategoryDto categoryDto, Authentication authentication, Long categoryId){
         Category category = makeCategory(categoryDto);
@@ -50,14 +47,12 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(category.getName())
                 .build();
     }
-
     private Category makeCategory(CategoryDto categoryDto){
         return Category.builder()
                 .id(categoryDto.getId())
                 .name(categoryDto.getName())
                 .build();
     }
-
     private List<CategoryDto> getCategoryDto(List<Category> categories) {
         List<CategoryDto> dto = new ArrayList<>();
         categories.forEach(e -> dto.add( CategoryDto.builder()

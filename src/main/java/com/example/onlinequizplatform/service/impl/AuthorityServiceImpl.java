@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorityServiceImpl implements AuthorityService {
     private final AuthorityDao authorityDao;
-
     @Override
     public AuthorityDto getRoles(String role) {
         Optional<Authority> authority = authorityDao.getRoles(role);
@@ -23,5 +22,4 @@ public class AuthorityServiceImpl implements AuthorityService {
                 .id(authority.get().getId())
                 .role(authority.get().getRole())
                 .build();
-    }
-}
+    }}

@@ -57,7 +57,6 @@ public class QuizServiceImpl implements QuizService {
         }
         return quizDtos;
     }
-
     @Override
     public Long createQuiz(QuizDto quizDto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -79,7 +78,6 @@ public class QuizServiceImpl implements QuizService {
 
         return quizId;
     }
-
     @Override
     public void updateQuiz(QuizDto quizDto, Authentication authentication, Long quizId) {
         User user = (User) authentication.getPrincipal();
@@ -100,17 +98,14 @@ public class QuizServiceImpl implements QuizService {
             }
         }
     }
-
     public Long createQuestionForQuiz(Long quizId, QuestionDto questionDto) {
         Question question = makeQuestion(questionDto, quizId);
         return questionDao.createQuestion(question);
     }
-
     public void updateQuestionForQuiz(Long quizId, QuestionDto questionDto){
         Question question = makeQuestion(questionDto,quizId);
         questionDao.updateQuestion(question);
     }
-
     private Quiz makeQuiz(QuizDto quizDto){
         return Quiz.builder()
                 .title(quizDto.getTitle())
@@ -119,7 +114,6 @@ public class QuizServiceImpl implements QuizService {
                 .categoryId(quizDto.getCategoryId())
                 .build();
     }
-
     private QuizDto makeQuizDto(Quiz quiz){
         return QuizDto.builder()
                 .id(quiz.getId())
@@ -129,14 +123,12 @@ public class QuizServiceImpl implements QuizService {
                 .categoryId(quiz.getCategoryId())
                 .build();
     }
-
     private Question makeQuestion(QuestionDto questionDto, Long quizId) {
         return Question.builder()
                 .questionText(questionDto.getQuestionText())
                 .quizId(quizId)
                 .build();
     }
-
     private OptionDto makeOptionDto(Option option) {
         return OptionDto.builder()
                 .id(option.getId())
@@ -145,7 +137,6 @@ public class QuizServiceImpl implements QuizService {
                 .questionId(option.getQuestionId())
                 .build();
     }
-
     private QuestionDto makeQuestionDto(Question question, List<OptionDto> options) {
         return QuestionDto.builder()
                 .id(question.getId())
@@ -154,7 +145,6 @@ public class QuizServiceImpl implements QuizService {
                 .option(options)
                 .build();
     }
-
     @Override
     public QuizDto getQuizById(Long quizId) {
         Quiz quiz = quizDao.getQuizById(quizId);
@@ -178,7 +168,6 @@ public class QuizServiceImpl implements QuizService {
         }
         return null;
     }
-
     @Override
     public QuizResultAnsverDto solve(Long quizId, List<QuestionSolveDto> questionSolveDtos, Authentication auth) {
         User user = (User) auth.getPrincipal();
@@ -238,7 +227,6 @@ public class QuizServiceImpl implements QuizService {
                 .unCorrectAnswers(unCorrectAnsver.get())
                 .build();
     }
-
     @Override
     public List<QuestionDto> getQuestionsByQuizIdWithPagination(Long quizId, int page, int size) {
         int offset = page * size;
@@ -255,6 +243,4 @@ public class QuizServiceImpl implements QuizService {
             questionDtos.add(questionDto);
         }
         return questionDtos;
-    }
-
-}
+    }}

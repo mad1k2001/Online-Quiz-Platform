@@ -24,7 +24,6 @@ public class ErrorServiceImpl implements ErrorService {
                 .reasons(List.of(message))
                 .build();
     }
-
     @Override
     public ErrorResponseBody makeResponseBind(BindingResult ex) {
         List<String> errors = new ArrayList<>();
@@ -35,5 +34,4 @@ public class ErrorServiceImpl implements ErrorService {
                 .title("Validation error")
                 .reasons(errors)
                 .build();
-    }
-}
+    }}

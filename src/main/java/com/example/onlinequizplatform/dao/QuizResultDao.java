@@ -20,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuizResultDao {
     private final JdbcTemplate jdbcTemplate;
-
     public List<QuizResult> getResultsByUserEmail(String email){
         String sql = """
                 SELECT * FROM quiz_results q
@@ -29,7 +28,6 @@ public class QuizResultDao {
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), email);
     }
-
     public boolean isAnswered(String email, Long quizId){
         String sql = """
                 SELECT
@@ -42,28 +40,23 @@ public class QuizResultDao {
 
         return jdbcTemplate.queryForObject(sql, Boolean.class, email, quizId);
     }
-
     public Optional<QuizResult> getQuizResultById(Long quizId, Long userId) {
         String sql = "SELECT * FROM QUIZ_RESULTS WHERE QUIZ_ID = ? and USER_ID = ?";
         var result = Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), quizId, userId)));
         return result;
     }
-
     public List<QuizResult> getQuizResultsByQuizId(Long quizId) {
         String sql = "SELECT * FROM QUIZ_RESULTS WHERE QUIZ_ID = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), quizId);
     }
-
     public List<QuizResult> getQuizResultByUserId(Long userId) {
         String sql = "SELECT * FROM QUIZ_RESULTS WHERE USER_ID = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResult.class), userId);
     }
-
     public void updateQuizRating(Long quizId, Double rating, Long userId) {
         String sql = "UPDATE QUIZ_RESULTS SET QUIZ_RATING = ? WHERE QUIZ_ID = ? and USER_ID = ?";
         jdbcTemplate.update(sql, rating, quizId, userId);
     }
-
     public Long createQuizResult(QuizResult quiz) {
         String sql = """
                 INSERT INTO QUIZ_RESULTS(SCORE, QUIZ_ID, USER_ID, CORRECT_ANSWERS, TOTAL_QUESTIONS)
@@ -83,12 +76,10 @@ public class QuizResultDao {
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
     public void clearBestPlayersTable(){
         String clearTable = "delete from BEST_PLAYERS;";
         jdbcTemplate.update(clearTable);
     }
-
     public void insertTenBestPlayers() {
         String insertBestPl = """
                 INSERT INTO BEST_PLAYERS (POSITION, USER_NAME, SCORE, USER_ID)
@@ -99,7 +90,6 @@ public class QuizResultDao {
                 """;
         jdbcTemplate.update(insertBestPl);
     }
-
     public List<TopPlayers> topFivePlayers() {
         String sql =  """
                 select top(5) * from BEST_PLAYERS
@@ -107,7 +97,6 @@ public class QuizResultDao {
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TopPlayers.class));
     }
-
     public List<TopPlayers> topTenPlayers() {
         String sql =  """
                 select top(10) * from BEST_PLAYERS
@@ -118,5 +107,4 @@ public class QuizResultDao {
     public List<QuizResultDto> getQuizResultsByQuizIdWithPagination(Long quizId, int offset, int size) {
         String sql = "SELECT * FROM quiz_results WHERE quiz_id = ? LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(QuizResultDto.class), quizId, size, offset);
-    }
-}
+    }}

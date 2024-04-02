@@ -36,5 +36,4 @@ public class CategoryController {
     public HttpStatus updateCategory(Authentication authentication, @PathVariable Long categoryId, @RequestBody CategoryDto categoryDto){
         categoryService.updateCategory(categoryDto, authentication, categoryId);
         return HttpStatus.OK;
-    }
-}
+    }}

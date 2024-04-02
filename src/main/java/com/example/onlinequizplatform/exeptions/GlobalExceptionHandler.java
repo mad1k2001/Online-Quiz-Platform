@@ -14,7 +14,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     private final ErrorService error;
 
     @ExceptionHandler(NoSuchElementException.class)
@@ -30,5 +29,4 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity validHandler(ConstraintViolationException ex) {
         return new ResponseEntity<>(error.makeResponseEx( ex), HttpStatus.BAD_REQUEST);
-    }
-}
+    }}
